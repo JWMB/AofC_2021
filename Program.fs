@@ -4,5 +4,5 @@ open System
 
 [<EntryPoint>]
 let main argv =
-    printf "Result: %O" D6.main
+    printf "Result: %O" D7.main
     0
