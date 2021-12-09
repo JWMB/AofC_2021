@@ -78,7 +78,7 @@ let main =
         <body>{elements}</body>
         </html> "
     
-    System.IO.File.WriteAllText(@"C:\Users\jonas\Desktop\Basins.html", renderAsHtml 3);
+    System.IO.File.WriteAllText(@"Basins.html", renderAsHtml 3);
 
     let top3 = basinsBySize |> Array.take 3
     top3 |> Array.map (fun f -> f.Length) |> Array.reduce (fun agg curr -> agg * curr)
