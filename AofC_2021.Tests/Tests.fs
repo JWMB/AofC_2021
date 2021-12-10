@@ -92,6 +92,26 @@ let ``D4`` () =
     Assert.Equal(1924, pt2);
 
 [<Fact>]
+let ``D5`` () =
+    let input = "
+0,9 -> 5,9
+8,0 -> 0,8
+9,4 -> 3,4
+2,2 -> 2,1
+7,0 -> 7,4
+6,4 -> 2,0
+0,9 -> 2,9
+3,4 -> 1,4
+0,0 -> 8,8
+5,5 -> 8,2
+    "
+    let pt1 = D5.part1 input
+    Assert.Equal(5, pt1);
+
+    let pt2 = D5.part2 input
+    Assert.Equal(12, pt2);
+
+[<Fact>]
 let ``D9`` () =
     let input = "
 2199943210

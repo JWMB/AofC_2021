@@ -7,6 +7,23 @@ type Line = { Start: Point; End: Point; }
 
 type BoardCoordinates = { Size: Point; TopLeft: Point; }
 
+let parseInput (input: string) =
+    let split = Regex.Split(input.Trim(), @"(\r?\n\s*){1}")
+    let rows = split |> Array.map (fun r -> r.Trim()) |> Array.filter (fun r -> r.Length > 0)
+    let items = rows |> Array.map (fun r -> Regex.Split(r, @" -> ") |> Array.map (fun item -> 
+        let ints = item.Split(',') |> Array.map int
+        { X = ints.[0]; Y = ints.[1]  }
+    ))
+    let lines = items |> Array.map (fun el -> { Start = el.[0]; End = el.[1]; })
+
+    let allX = items |> Array.map (fun r -> r |> Array.map (fun x -> x.X)) |> Array.reduce Array.append
+    let allY = items |> Array.map (fun r -> r |> Array.map (fun x -> x.X)) |> Array.reduce Array.append
+
+    let boardRect = {| left = allX |> Array.min; top = allY |> Array.min; right = allX |> Array.max; bottom = allY |> Array.max |}
+    let size =  { X = boardRect.right - boardRect.left + 1; Y = boardRect.bottom - boardRect.top + 1; }
+    let topleft = { X = boardRect.left; Y = boardRect.top; }
+    ({ Size = size; TopLeft = topleft; }, lines)
+
 let getBoardIndex (pt:Point) (boardCoordinates:BoardCoordinates) =
     pt.X - boardCoordinates.TopLeft.X + (pt.Y - boardCoordinates.TopLeft.Y) * boardCoordinates.Size.X
 
@@ -39,45 +56,21 @@ let boardToString (board: List<int>) width =
 let createBoardList size =
      [0 .. (size.X * size.Y)] |> List.map (fun el -> 0)
 
-let main =
-
-    let exampleData = "
-    0,9 -> 5,9
-    8,0 -> 0,8
-    9,4 -> 3,4
-    2,2 -> 2,1
-    7,0 -> 7,4
-    6,4 -> 2,0
-    0,9 -> 2,9
-    3,4 -> 1,4
-    0,0 -> 8,8
-    5,5 -> 8,2
-    "
-
-    let data = System.IO.File.ReadAllText("D5.txt")
-
-    let split = Regex.Split(data.Trim(), @"(\r?\n\s*){1}")
-    let rows = split |> Array.map (fun r -> r.Trim()) |> Array.filter (fun r -> r.Length > 0)
-    let items = rows |> Array.map (fun r -> Regex.Split(r, @" -> ") |> Array.map (fun item -> 
-        let ints = item.Split(',') |> Array.map int
-        { X = ints.[0]; Y = ints.[1]  }
-    ))
-    let lines = items |> Array.map (fun el -> { Start = el.[0]; End = el.[1]; })
-                // Part 1: |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y)
-
-    let allX = items |> Array.map (fun r -> r |> Array.map (fun x -> x.X)) |> Array.reduce Array.append
-    let allY = items |> Array.map (fun r -> r |> Array.map (fun x -> x.X)) |> Array.reduce Array.append
-
-    let boardRect = {| left = allX |> Array.min; top = allY |> Array.min; right = allX |> Array.max; bottom = allY |> Array.max |}
-    let size =  { X = boardRect.right - boardRect.left + 1; Y = boardRect.bottom - boardRect.top + 1; }
-    let topleft = { X = boardRect.left; Y = boardRect.top; }
-    let boardCoords = { Size = size; TopLeft = topleft; }
-
+let drawLines boardCoords lines =
     let boardList = createBoardList boardCoords.Size
     let boardArray = boardList |> List.toArray // Aha, Arrays are mutable - we need that now since all those folds on a 1000*1000 List will take a *lot* of time
     //let board2 = lines |> Array.fold (fun agg curr -> drawLine agg boardCoords curr ) board
     for line in lines do
         drawLineMutable boardArray boardCoords line
+    boardArray
 
+let part1 input =
+    let (boardCoords, lines) = parseInput input
+    let boardArray = drawLines boardCoords (lines |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y))
+    boardArray |> Array.filter (fun el -> el > 1) |> Array.length
+
+let part2 input =
+    let (boardCoords, lines) = parseInput input
     //printf "%O\n" (boardToString board2 size.X)
+    let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
