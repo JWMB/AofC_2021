@@ -19,6 +19,25 @@ let getCombinationsString (str: string) = allCombinations (str |> Seq.toList) |>
 
 type DigSeg = { Digit: int; Segments: string }
 
+let segmentsInput = "
+0:      1:      2:      3:      4:
+ aaaa    ....    aaaa    aaaa    ....
+b    c  .    c  .    c  .    c  b    c
+b    c  .    c  .    c  .    c  b    c
+ ....    ....    dddd    dddd    dddd
+e    f  .    f  e    .  .    f  .    f
+e    f  .    f  e    .  .    f  .    f
+ gggg    ....    gggg    gggg    ....
+
+5:      6:      7:      8:      9:
+ aaaa    aaaa    aaaa    aaaa    aaaa
+b    .  b    .  .    c  b    c  b    c
+b    .  b    .  .    c  b    c  b    c
+ dddd    dddd    ....    dddd    dddd
+.    f  e    f  .    f  e    f  .    f
+.    f  e    f  .    f  e    f  .    f
+ gggg    gggg    ....    gggg    gggg"
+
 let getDigitsWithSegments (definition: string) =
     let limitLastIndex (str: string) index = [| index; str.Length - 1 |] |> Array.min
     let getColumns (rows: string) startIndex endIndex =
@@ -46,50 +65,36 @@ let getDigitsWithSegments (definition: string) =
         })
     digitsWithSegments
 
-let main =
-    let input = "
-    be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb |
-    fdgacbe cefdb cefbgd gcbe
-    edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec |
-    fcgedb cgb dgebacf gc
-    fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef |
-    cg cg fdcagb cbg
-    fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega |
-    efabcd cedba gadfec cb
-    aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga |
-    gecf egdcabf bgf bfgea
-    fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf |
-    gebdcfa ecba ca fadegcb
-    dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf |
-    cefg dcbef fcge gbcadfe
-    bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd |
-    ed bcgafe cdgba cbgef
-    egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg |
-    gbdfcae bgc cg cgb
-    gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |
-    fgae cfgab fg bagce
-    "
+let digitsWithSegments = getDigitsWithSegments segmentsInput
 
-    let segmentsInput = "
-0:      1:      2:      3:      4:
- aaaa    ....    aaaa    aaaa    ....
-b    c  .    c  .    c  .    c  b    c
-b    c  .    c  .    c  .    c  b    c
- ....    ....    dddd    dddd    dddd
-e    f  .    f  e    .  .    f  .    f
-e    f  .    f  e    .  .    f  .    f
- gggg    ....    gggg    gggg    ....
+let signalToDigSegs signal =
+    signal |> Array.map (fun f -> f |> Seq.toArray |> Array.sort |> Array.map string |> String.concat "") |> Array.distinct |> Array.mapi (fun i f -> { Digit = -1 * i - 1; Segments = f; })
 
-5:      6:      7:      8:      9:
- aaaa    aaaa    aaaa    aaaa    aaaa
-b    .  b    .  .    c  b    c  b    c
-b    .  b    .  .    c  b    c  b    c
- dddd    dddd    ....    dddd    dddd
-.    f  e    f  .    f  e    f  .    f
-.    f  e    f  .    f  e    f  .    f
- gggg    gggg    ....    gggg    gggg"
+let parseInput (input: string) =
+    Regex.Split(Regex.Replace(input.Trim(), @"\|\s*\n", "|"), @"\n")
+    |> Array.map (fun f -> f.Split('|') |> Array.map (fun items -> items.Trim().Split(' ')))
+    |> Array.map (fun f -> 
+        {| Signal = f.[0]; 
+        SignalNormalized = signalToDigSegs f.[0];
+        Output = f.[1]; |})
 
-    let digitsWithSegments = getDigitsWithSegments segmentsInput
+let part1 input =
+    let data = parseInput input
+
+    let numberToSegments = digitsWithSegments |> Array.map (fun f -> (f.Digit, f.Segments)) |> Map.ofArray
+    let byNumSegments = [| for (KeyValue(k, v)) in numberToSegments -> (k, v.Length) |] |> Array.groupBy (fun f -> snd f)
+    let singleInstances = byNumSegments |> Array.filter (fun f -> (snd f).Length = 1)
+    let singleInstanceSegmentCounts = singleInstances |> Array.map (fun f -> fst f)
+
+    let outputLengths = data |> Array.map (fun f -> f.Output |> Array.map (fun item -> item.Length))
+                        |> Array.reduce Array.append
+
+    let counts = outputLengths |> Array.filter (fun f -> singleInstanceSegmentCounts |> Array.contains f ) |> Array.length
+    counts
+
+
+let part2 input =
+    let data = parseInput input
 
     let groupBySegment arrWithSegments  =
         let all = arrWithSegments |> Array.map (fun f -> f.Segments) |> String.concat "" |> Seq.toArray |> Array.distinct
@@ -97,19 +102,7 @@ b    .  b    .  .    c  b    c  b    c
             let containedIn = arrWithSegments |> Array.filter (fun ds -> (ds.Segments).Contains(char)) |> Array.map (fun f -> f.Digit)
             {| Segment = char; ContainedIn = containedIn |}
         )
-
-    let input = System.IO.File.ReadAllText("D8.txt")
-
-    let signalToDigSegs signal =
-        signal |> Array.map (fun f -> f |> Seq.toArray |> Array.sort |> Array.map string |> String.concat "") |> Array.distinct |> Array.mapi (fun i f -> { Digit = -1 * i - 1; Segments = f; })
-
-    let data = Regex.Split(Regex.Replace(input.Trim(), @"\|\s*\n", "|"), @"\n")
-                |> Array.map (fun f -> f.Split('|') |> Array.map (fun items -> items.Trim().Split(' ')))
-                |> Array.map (fun f -> 
-                    {| Signal = f.[0]; 
-                    SignalNormalized = signalToDigSegs f.[0];
-                    Output = f.[1]; |})
-                
+    
     // part 2: Wanted to brute force - no shortcuts, try to identify all segments first, then translate to digits.
     let getUniqueFreqs segFreqs =
         segFreqs |> Array.groupBy (fun (f: {| ContainedIn: 'a[]; Segment: char; |}) ->
@@ -157,16 +150,3 @@ b    .  b    .  .    c  b    c  b    c
     let translatedOutput = data |> Array.map (fun f -> translateInputToReal f.SignalNormalized f.Output)
     let sum = translatedOutput |> Array.sum
     sum
-    
-    //// part 1:
-    //let numberToSegments = digitsWithSegments |> Array.map (fun f -> (f.Digit, f.Segments)) |> Map.ofArray
-    //let byNumSegments = [| for (KeyValue(k, v)) in numberToSegments -> (k, v.Length) |] |> Array.groupBy (fun f -> snd f)
-    //let singleInstances = byNumSegments |> Array.filter (fun f -> (snd f).Length = 1)
-    //let singleInstanceSegmentCounts = singleInstances |> Array.map (fun f -> fst f)
-
-    //let outputLengths = data |> Array.map (fun f -> f.Output |> Array.map (fun item -> item.Length))
-    //                    |> Array.reduce Array.append
-
-    //let counts = outputLengths |> Array.filter (fun f -> singleInstanceSegmentCounts |> Array.contains f ) |> Array.length
-    //counts
-
