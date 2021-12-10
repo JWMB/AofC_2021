@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AofC_2021.fsproj" />
+    <ProjectReference Include="..\AofC_2021\AofC_2021.fsproj" />
   </ItemGroup>
 
 </Project>
