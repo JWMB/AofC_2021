@@ -2,7 +2,7 @@
 
 [<EntryPoint>]
 let main argv =
-    let day = 9
+    let day = 11
     
     let assembly = AppDomain.CurrentDomain.GetAssemblies() |> Array.find (fun a -> a.GetName().Name.StartsWith("AofC"))
     let dayType = assembly.ExportedTypes |> Seq.find (fun t -> t.Name = $"D{day}")
