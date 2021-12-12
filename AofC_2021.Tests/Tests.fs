@@ -157,6 +157,9 @@ gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |
 fgae cfgab fg bagce
 "
+    let items = D8.parseInput input
+    Assert.Equal(10, items.Length);
+
     let pt1 = D8.part1 input
     Assert.Equal(26, pt1);
 

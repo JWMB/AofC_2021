@@ -73,7 +73,7 @@ let signalToDigSegs signal =
     signal |> Array.map (fun f -> f |> Seq.toArray |> Array.sort |> Array.map string |> String.concat "") |> Array.distinct |> Array.mapi (fun i f -> { Digit = -1 * i - 1; Segments = f; })
 
 let parseInput (input: string) =
-    Regex.Split(Regex.Replace(input.Trim(), @"\|\s*\r?\n", "|"), @"\r?\n")
+    Regex.Split(Regex.Replace(input.Trim().Replace("\r", ""), @"\|\s*\r?\n", "|"), @"\r?\n")
     |> Array.map (fun f -> f.Split('|') |> Array.map (fun items -> items.Trim().Split(' ')))
     |> Array.map (fun f -> 
         {| Signal = f.[0]; 
