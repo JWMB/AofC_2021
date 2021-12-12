@@ -44,8 +44,6 @@ let part1 input =
                                     else
                                         ([|winning.Value|], snd agg)
                                 ) (boards, "")
-    //let asString = firstWinner |> String.concat;
-    //let aa = Regex.Matches(asString, @"(\s(\d+)") |> Seq.cast<Match> |> Array.sumBy (fun m -> int m.Groups.[1])
     (getSumOfLeftovers firstWinner.[0]) * (int draw)
 
 let part2 input =
@@ -58,7 +56,6 @@ let part2 input =
                                     if newWons.Length = 0 then (mods, won, preDraw)
                                     else (mods |> Array.except newWons, won |> Array.append newWons, curr)
                                 ) (boards, Array.zeroCreate<string> 0, "!")
-    //printf "%O\n" (Array.last won)
 
     if won.Length = 0 then 0
     else

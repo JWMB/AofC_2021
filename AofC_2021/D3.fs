@@ -40,25 +40,3 @@ let part2 input =
     let co2 = (fun num1s total -> (num1s * 2 >= total) = false)
 
     goForthAndMultiply [| oxy; co2;|] lifeSupportCalc
-
-
-//let main =
-//    let input = "
-//    00100
-//    11110
-//    10110
-//    10111
-//    10101
-//    01111
-//    00111
-//    11100
-//    10000
-//    11001
-//    00010
-//    01010
-//    "
-
-//    let input = System.IO.File.ReadAllText("D3.txt")
-//    let data = Regex.Split(input.Trim(), @"\n") |> Array.map (fun f -> f.Trim())
-
-//    let indexArray =  [| 0 .. data.[0].Length - 1|]

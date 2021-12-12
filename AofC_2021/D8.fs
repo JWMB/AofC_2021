@@ -95,6 +95,7 @@ let part1 input =
 
 let part2 input =
     let data = parseInput input
+    // Note: Wanted to "brute force" by identifying the digit segments, then translating to digits
 
     let groupBySegment arrWithSegments  =
         let all = arrWithSegments |> Array.map (fun f -> f.Segments) |> String.concat "" |> Seq.toArray |> Array.distinct
@@ -103,7 +104,6 @@ let part2 input =
             {| Segment = char; ContainedIn = containedIn |}
         )
     
-    // part 2: Wanted to brute force - no shortcuts, try to identify all segments first, then translate to digits.
     let getUniqueFreqs segFreqs =
         segFreqs |> Array.groupBy (fun (f: {| ContainedIn: 'a[]; Segment: char; |}) ->
             f.ContainedIn |> Array.length) |> Array.filter (fun f -> (snd f).Length = 1) |> Array.map (fun f -> (snd f).[0])
