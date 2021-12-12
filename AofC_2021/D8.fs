@@ -39,7 +39,7 @@ b    .  b    .  .    c  b    c  b    c
  gggg    gggg    ....    gggg    gggg"
 
 let getDigitsWithSegments (definition: string) =
-    let limitLastIndex (str: string) index = [| index; str.Length - 1 |] |> Array.min
+    let limitLastIndex (str: string) index = [| index; str.Length |] |> Array.min
     let getColumns (rows: string) startIndex endIndex =
         rows.Split('\n') |> Array.map (fun f -> f.Substring(startIndex, ((limitLastIndex f endIndex) - startIndex))) |> String.concat "\n"
     let getColumnIndices str =
@@ -51,7 +51,7 @@ let getDigitsWithSegments (definition: string) =
     let digitChunks = numberDefs |> Array.map (fun section -> 
             let rows = section.Split('\n')
             let header = rows |> Array.head
-            let nonHeaderRowLength = (rows |> Array.tail |> Array.head).Length
+            let nonHeaderRowLength = rows |> Array.tail |> Array.map (fun f -> f.Length) |> Array.max
             let indices = [| {| Index = nonHeaderRowLength; Digit = -1 |} |] |> Array.append (getColumnIndices header)
             let ranges = indices |> Array.windowed 2 |> Array.map (fun f -> {| Start = f.[0].Index; End = f.[1].Index; Digit = f.[0].Digit |})
                         |> Array.filter (fun f -> f.Digit >= 0)
