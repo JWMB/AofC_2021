@@ -45,7 +45,7 @@ let generateReadMe (type_: Type) (aofcInfo: Tools.AofCSiteInfo.DayInfo) (basePat
     let methodInfo input (method: Reflection.MethodInfo) = $"### {method.Name}\n```\n{getSnippet method}\n```\nResult: `{method.Invoke(null, [|input|])}`"
 
     let input = getFileContent type_ "txt"
-    $"""## [Day {aofcInfo.Day} - {aofcInfo.Title}]({aofcInfo.Url}.fs)
+    $"""## [Day {aofcInfo.Day} - {aofcInfo.Title}]({aofcInfo.Url})
 [Source]({relativePath type_.Name})  
 [Input]({match getTypeFilePath type_ "txt" with | Some f -> relativePath f.Name | None -> ""})  
 {getDayPartMethods type_ |> Array.map (fun f-> methodInfo input f) |> String.concat "\n"}
