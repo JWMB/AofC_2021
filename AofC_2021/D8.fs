@@ -63,6 +63,8 @@ let getDigitsWithSegments (definition: string) =
         { Digit = f.Digit;
         Segments = Regex.Matches(f.Chunk, @"[a-g]") |> Seq.cast<Match> |> Seq.map (fun m -> m.Value) |> Seq.distinct |> Seq.sort |> String.concat ""
         })
+    if digitsWithSegments.Length <> 10 then
+        raise (new System.Exception($"Digit/Segment parser: Incorrect # digits: {digitsWithSegments.Length} (split:{numberDefs.Length})"))
     digitsWithSegments
 
 let digitsWithSegments = getDigitsWithSegments segmentsInput

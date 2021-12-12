@@ -133,8 +133,7 @@ let ``D7`` () =
     let pt2 = D7.part2 input
     Assert.Equal(168, pt2);
 
-//[<Fact>]
-// TODO: for some reason this passes locally but not on GitHub
+[<Fact>]
 let ``D8`` () =
     let input = "
 be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb |
