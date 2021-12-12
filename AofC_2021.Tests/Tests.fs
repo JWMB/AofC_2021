@@ -217,3 +217,31 @@ let ``D11`` () =
 
     let pt2 = D11.part2 input
     Assert.Equal(195, pt2);
+
+[<Fact>]
+let ``D12`` () =
+    let input = "
+fs-end
+he-DX
+fs-he
+start-DX
+pj-DX
+end-zg
+zg-sl
+zg-pj
+pj-he
+RW-he
+fs-DX
+pj-RW
+zg-RW
+start-pj
+he-WI
+zg-he
+pj-fs
+start-RW
+    "
+    let pt1 = D12.part1 input
+    Assert.Equal(226, pt1);
+
+    let pt2 = D12.part2 input
+    Assert.Equal(3509, pt2);
