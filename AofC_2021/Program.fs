@@ -46,7 +46,7 @@ let generateReadMe (types: Type array) (basePath: DirectoryInfo) =
     types |> Array.map (fun t -> 
         let input = getFileContent t "txt"
         $"""## [{t.Name}]({relativePath t.Name}.fs)
-[Data file]({match getTypeFilePath t "txt" with | Some f -> relativePath f | None -> ""})  
+[Data file]({match getTypeFilePath t "txt" with | Some f -> relativePath f.Name | None -> ""})  
 {getDayPartMethods t |> Array.map (fun f-> methodInfo input f) |> String.concat "\n"}
 """
     ) 
