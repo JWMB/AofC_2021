@@ -13,14 +13,14 @@ type Kind =
 let pairs = "[] () <> {}"
 
 let getKind (c: char) = match pairs.IndexOf(c) with
-    | val1 when val1 % 3 = 0 -> Kind.Open
-    | val1 when val1 % 3 = 1 -> Kind.Close
-    | _ -> Kind.Invalid
+                        | val1 when val1 % 3 = 0 -> Kind.Open
+                        | val1 when val1 % 3 = 1 -> Kind.Close
+                        | _ -> Kind.Invalid
 
 let getMatchingChar (c: char) = match pairs.IndexOf(c) with
-    | val1 when val1 % 3 = 0 -> pairs.[val1 + 1]
-    | val1 when val1 % 3 = 1 -> pairs.[val1 - 1]
-    | _ -> raise (System.ArgumentException("Invalid char"))
+                                | val1 when val1 % 3 = 0 -> pairs.[val1 + 1]
+                                | val1 when val1 % 3 = 1 -> pairs.[val1 - 1]
+                                | _ -> raise (System.ArgumentException("Invalid char"))
 
 let modifyStack c stack = 
     let kind = getKind c
