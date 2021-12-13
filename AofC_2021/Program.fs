@@ -2,6 +2,7 @@
 open System.Text.RegularExpressions
 open System.IO
 open Tools
+open System.Diagnostics
 
 let getDayPartMethods (type_: Type) =
     type_.GetMethods() |> Seq.filter (fun m -> m.Name.StartsWith("part")) |> Seq.toArray
@@ -43,12 +44,16 @@ let generateReadMe (type_: Type) (aofcInfo: Tools.AofCSiteInfo.DayInfo) (basePat
         if m.Success then m.Value.Trim()
         else ""
     let methodInfo input (method: Reflection.MethodInfo) = 
+        let stopWatch = new Stopwatch();
+        stopWatch.Start()
         let methodResult = method.Invoke(null, [|input|]).ToString()
+        stopWatch.Stop()
+        let elapsed = int stopWatch.Elapsed.TotalMilliseconds
         let methodResultString = 
             if methodResult.Contains("\n") then
                 $"\n```\n{methodResult}\n```"
             else $"`{methodResult}`"
-        $"### {method.Name}\n```FSharp\n{getSnippet method}\n```\nResult: {methodResultString}"
+        $"### {method.Name}\n```FSharp\n{getSnippet method}\n```\nResult (in `{elapsed}`ms): {methodResultString}"
 
     let input = getFileContent type_ "txt"
     $"""## [Day {aofcInfo.Day} - {aofcInfo.Title}]({aofcInfo.Url})
