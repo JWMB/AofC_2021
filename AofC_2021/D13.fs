@@ -1,6 +1,7 @@
 ﻿module D13
 
 open System.Text.RegularExpressions
+open Tools.GridTools
 
 let pp = "
 6,10
@@ -25,8 +26,6 @@ let pp = "
 fold along y=7
 fold along x=5
 "
-
-type Point = { X: int; Y: int; }
 
 let parseInput (input: string) = 
     let sections = Regex.Split(input.Trim(), @"(\r?\n\s*){2}") |> Array.map (fun r -> r.Trim()) |> Array.filter (fun r -> r.Length > 0) |> Array.map (fun f -> Regex.Split(f, @"\r?\n"))
@@ -63,15 +62,10 @@ let part2 input =
     let data = parseInput input
     let folded = data.Folds |> Array.fold (fun agg curr -> fold curr agg) data.Points
 
-    let xs = folded |> Array.map (fun f -> f.X)
-    let ys = folded |> Array.map (fun f -> f.Y)
-    let tl = { X = xs |> Array.min; Y = ys |> Array.min; }
-    let br = { X = xs |> Array.max; Y = ys |> Array.max; }
-    let size = { X = br.X - tl.X; Y = br.Y - tl.Y }
-    let mutable bm = [|0..size.Y|] |> Array.map (fun y -> [|0..size.X|] |> Array.map (fun x -> ' '))
+    let grid = Grid2D.FromCoordinates folded
+    let mutable bm = [|0..grid.Size.Y|] |> Array.map (fun y -> [|0..grid.Size.X|] |> Array.map (fun x -> '.'))
 
-    for pt in folded |> Array.map (fun pt -> { X = pt.X - tl.X; Y = pt.Y - tl.Y }) do
-        bm.[pt.Y].[pt.X] <- 'X'
+    for pt in folded |> Array.map (fun pt -> { X = pt.X - grid.TopLeft.X; Y = pt.Y - grid.TopLeft.Y }) do
+        bm.[pt.Y].[pt.X] <- '#'
 
-    let str = bm |> Array.map (fun r -> r |> Array.map string |> String.concat "") |> String.concat "  \n"
-    str
+    bm |> Array.map (fun r -> r |> Array.map string |> String.concat "") |> String.concat "\n"

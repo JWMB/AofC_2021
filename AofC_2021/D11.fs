@@ -1,7 +1,7 @@
 ﻿module D11
 
 open System.Text.RegularExpressions
-open Common
+open Tools.GridTools
 
 let parseInput (input: string) = 
     Regex.Split(input.Trim(), @"(\r?\n\s*){1}") |> Array.map (fun f -> f.Trim()) |> Array.filter (fun f -> f.Length > 0);

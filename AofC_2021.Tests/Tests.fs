@@ -277,12 +277,11 @@ fold along x=5
     let pt1 = D13.part1 input
     Assert.Equal(17, pt1);
 
-    //let pt2 = D13.part2 input
-    //let expected = "#####
-    //#...#
-    //#...#
-    //#...#
-    //#####
-    //.....
-    //....."
-    //Assert.Equal(expected, pt2);
+    let pt2 = D13.part2 input
+    let expected = "
+#####
+#...#
+#...#
+#...#
+#####"
+    Assert.Equal(expected.Trim().Replace("\r", ""), pt2);

@@ -44,7 +44,10 @@ let generateReadMe (type_: Type) (aofcInfo: Tools.AofCSiteInfo.DayInfo) (basePat
         else ""
     let methodInfo input (method: Reflection.MethodInfo) = 
         let methodResult = method.Invoke(null, [|input|]).ToString()
-        let methodResultString = if methodResult.Contains("\n") then $"\n```\n{methodResult}\n```" else $"`{methodResult}`"
+        let methodResultString = 
+            if methodResult.Contains("\n") then
+                $"\n```\n{methodResult}\n```"
+            else $"`{methodResult}`"
         $"### {method.Name}\n```\n{getSnippet method}\n```\nResult: {methodResultString}"
 
     let input = getFileContent type_ "txt"

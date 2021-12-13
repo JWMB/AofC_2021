@@ -403,25 +403,21 @@ let part2 input =
     let data = parseInput input
     let folded = data.Folds |> Array.fold (fun agg curr -> fold curr agg) data.Points
 
-    let xs = folded |> Array.map (fun f -> f.X)
-    let ys = folded |> Array.map (fun f -> f.Y)
-    let tl = { X = xs |> Array.min; Y = ys |> Array.min; }
-    let br = { X = xs |> Array.max; Y = ys |> Array.max; }
-    let size = { X = br.X - tl.X; Y = br.Y - tl.Y }
-    let mutable bm = [|0..size.Y|] |> Array.map (fun y -> [|0..size.X|] |> Array.map (fun x -> ' '))
+    let grid = Grid2D.FromCoordinates folded
+    let mutable bm = [|0..grid.Size.Y|] |> Array.map (fun y -> [|0..grid.Size.X|] |> Array.map (fun x -> '.'))
 
-    for pt in folded |> Array.map (fun pt -> { X = pt.X - tl.X; Y = pt.Y - tl.Y }) do
-        bm.[pt.Y].[pt.X] <- 'X'
+    for pt in folded |> Array.map (fun pt -> { X = pt.X - grid.TopLeft.X; Y = pt.Y - grid.TopLeft.Y }) do
+        bm.[pt.Y].[pt.X] <- '#'
 
-    let str = bm |> Array.map (fun r -> r |> Array.map string |> String.concat "") |> String.concat "  \n"
+    let str = bm |> Array.map (fun r -> r |> Array.map string |> String.concat "") |> String.concat "\n"
     str
 ```
 Result: 
 ```
-XXX   XX  XXXX XXX   XX  XXXX  XX  XXX   
-X  X X  X    X X  X X  X X    X  X X  X  
-XXX  X      X  X  X X    XXX  X  X XXX   
-X  X X     X   XXX  X    X    XXXX X  X  
-X  X X  X X    X X  X  X X    X  X X  X  
-XXX   XX  XXXX X  X  XX  XXXX X  X XXX 
+###...##..####.###...##..####..##..###.
+#..#.#..#....#.#..#.#..#.#....#..#.#..#
+###..#......#..#..#.#....###..#..#.###.
+#..#.#.....#...###..#....#....####.#..#
+#..#.#..#.#....#.#..#..#.#....#..#.#..#
+###...##..####.#..#..##..####.#..#.###.
 ```
