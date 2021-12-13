@@ -9,7 +9,7 @@ Learning F# by doing [AdventOfCode 2021](https://adventofcode.com/2021)
 let part1 input =
     countIncreases (parseInput input)
 ```
-Result (in `18`ms): `1709`
+Result (in `11`ms): `1709`
 ### part2
 ```FSharp
 let part2 input =
@@ -60,7 +60,7 @@ let part1 input =
     let fEpsilon value = value < (numItems / 2)
     goForthAndMultiply [| fGamma; fEpsilon;|] calc
 ```
-Result (in `5`ms): `4174964`
+Result (in `6`ms): `4174964`
 ### part2
 ```FSharp
 let part2 input =
@@ -82,7 +82,7 @@ let part2 input =
 
     goForthAndMultiply [| oxy; co2;|] lifeSupportCalc
 ```
-Result (in `2`ms): `4474944`
+Result (in `3`ms): `4474944`
 ## [Day 4 - Giant Squid](https://adventofcode.com/2021/day/4)
 [Source](AofC_2021/D4.fs) | [Input](AofC_2021/D4.txt)  
 ### part1
@@ -100,7 +100,7 @@ let part1 input =
                                 ) (boards, "")
     (getSumOfLeftovers firstWinner.[0]) * (int draw)
 ```
-Result (in `29`ms): `69579`
+Result (in `45`ms): `69579`
 ### part2
 ```FSharp
 let part2 input =
@@ -121,7 +121,7 @@ let part2 input =
         let sumOfLeftovers = getSumOfLeftovers lastWinner
         sumOfLeftovers * finalDraw
 ```
-Result (in `55`ms): `14877`
+Result (in `78`ms): `14877`
 ## [Day 5 - Hydrothermal Venture](https://adventofcode.com/2021/day/5)
 [Source](AofC_2021/D5.fs) | [Input](AofC_2021/D5.txt)  
 ### part1
@@ -131,7 +131,7 @@ let part1 input =
     let boardArray = drawLines boardCoords (lines |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y))
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `203`ms): `7297`
+Result (in `184`ms): `7297`
 ### part2
 ```FSharp
 let part2 input =
@@ -139,7 +139,7 @@ let part2 input =
     let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `183`ms): `21038`
+Result (in `221`ms): `21038`
 ## [Day 6 - Lanternfish](https://adventofcode.com/2021/day/6)
 [Source](AofC_2021/D6.fs) | [Input](AofC_2021/D6.txt)  
 ### part1
@@ -157,7 +157,7 @@ let part1 input =
                 ) school
     final.Length
 ```
-Result (in `49`ms): `358214`
+Result (in `98`ms): `358214`
 ### part2
 ```FSharp
 let part2 input =
@@ -184,7 +184,7 @@ Result (in `0`ms): `1622533344325`
 let part1 input =
     calc (parseInput input) (fun p1 p2 -> abs(p1 - p2))
 ```
-Result (in `21`ms): `336040`
+Result (in `38`ms): `336040`
 ### part2
 ```FSharp
 let part2 input =
@@ -193,7 +193,7 @@ let part2 input =
         diff * (diff + 1) / 2
     )
 ```
-Result (in `17`ms): `94813675`
+Result (in `40`ms): `94813675`
 ## [Day 8 - Seven Segment Search](https://adventofcode.com/2021/day/8)
 [Source](AofC_2021/D8.fs) | [Input](AofC_2021/D8.txt)  
 ### part1
@@ -212,7 +212,7 @@ let part1 input =
     let counts = outputLengths |> Array.filter (fun f -> singleInstanceSegmentCounts |> Array.contains f ) |> Array.length
     counts
 ```
-Result (in `24`ms): `445`
+Result (in `35`ms): `445`
 ### part2
 ```FSharp
 let part2 input =
@@ -273,7 +273,7 @@ let part2 input =
     let sum = translatedOutput |> Array.sum
     sum
 ```
-Result (in `659`ms): `1043101`
+Result (in `1089`ms): `1043101`
 ## [Day 9 - Smoke Basin](https://adventofcode.com/2021/day/9)
 [Source](AofC_2021/D9.fs) | [Input](AofC_2021/D9.txt)  
 ### part1
@@ -282,7 +282,7 @@ let part1 input =
     let map = createDepthMap input
     map.findLowPoints |> Array.map map.getAtPoint |> Array.map (fun f -> f + 1) |> Array.sum
 ```
-Result (in `9`ms): `535`
+Result (in `14`ms): `535`
 ### part2
 ```FSharp
 let part2 input =
@@ -296,7 +296,7 @@ let part2 input =
     let top3 = basinsBySize |> Array.take 3
     top3 |> Array.map (fun f -> f.Length) |> Array.reduce (fun agg curr -> agg * curr)
 ```
-Result (in `580`ms): `1122700`
+Result (in `1010`ms): `1122700`
 ## [Day 10 - Syntax Scoring](https://adventofcode.com/2021/day/10)
 [Source](AofC_2021/D10.fs) | [Input](AofC_2021/D10.txt)  
 ### part1
@@ -311,7 +311,7 @@ let part1 (input: string) =
         |> Array.map (fun f -> pointsPt1.[f])
         |> Array.sum
 ```
-Result (in `8`ms): `318081`
+Result (in `7`ms): `318081`
 ### part2
 ```FSharp
 let part2 (input: string) =
@@ -338,7 +338,7 @@ let part1 input =
                                     ) (data.Values, 0)
     numFlashes
 ```
-Result (in `19`ms): `1679`
+Result (in `29`ms): `1679`
 ### part2
 ```FSharp
 let part2 input =
@@ -349,7 +349,7 @@ let part2 input =
         else folder state step + 1
     folder data.Values 1
 ```
-Result (in `41`ms): `519`
+Result (in `75`ms): `519`
 ## [Day 12 - Passage Pathing](https://adventofcode.com/2021/day/12)
 [Source](AofC_2021/D12.fs) | [Input](AofC_2021/D12.txt)  
 ### part1
@@ -359,7 +359,7 @@ let part1 input =
     let paths = evaluate pairs (fun f ->  if f.ToUpper() = f then -1 else 1)
     paths.Length
 ```
-Result (in `60`ms): `4413`
+Result (in `103`ms): `4413`
 ### part2
 ```FSharp
 let part2 input =
@@ -372,7 +372,7 @@ let part2 input =
     let distinct = allPaths |> Array.reduce Array.append |> Array.distinct
     distinct.Length
 ```
-Result (in `1218`ms): `118803`
+Result (in `2390`ms): `118803`
 ## [Day 13 - Transparent Origami](https://adventofcode.com/2021/day/13)
 [Source](AofC_2021/D13.fs) | [Input](AofC_2021/D13.txt)  
 ### part1
