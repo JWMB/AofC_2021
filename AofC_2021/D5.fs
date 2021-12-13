@@ -1,11 +1,9 @@
 ﻿module D5
 
 open System.Text.RegularExpressions
+open Tools.GridTools
 
-type Point = { X: int; Y: int; }
-type Line = { Start: Point; End: Point; }
-
-type BoardCoordinates = { Size: Point; TopLeft: Point; }
+type Line = { Start: Vector2D; End: Vector2D; }
 
 let parseInput (input: string) =
     let split = Regex.Split(input.Trim(), @"(\r?\n\s*){1}")
@@ -24,14 +22,14 @@ let parseInput (input: string) =
     let topleft = { X = boardRect.left; Y = boardRect.top; }
     ({ Size = size; TopLeft = topleft; }, lines)
 
-let getBoardIndex (pt:Point) (boardCoordinates:BoardCoordinates) =
+let getBoardIndex pt boardCoordinates =
     pt.X - boardCoordinates.TopLeft.X + (pt.Y - boardCoordinates.TopLeft.Y) * boardCoordinates.Size.X
 
-let addAtBoard board (pt:Point) (boardCoordinates:BoardCoordinates) =
+let addAtBoard board pt boardCoordinates =
     let index = getBoardIndex pt boardCoordinates
     board |> List.mapi (fun i el -> if i = index then el + 1 else el)
 
-let addAtBoardMutable board (pt:Point) (boardCoordinates:BoardCoordinates) =
+let addAtBoardMutable board pt boardCoordinates =
     let index = getBoardIndex pt boardCoordinates
     Array.set board index (board.[index] + 1)
 
@@ -59,7 +57,6 @@ let createBoardList size =
 let drawLines boardCoords lines =
     let boardList = createBoardList boardCoords.Size
     let boardArray = boardList |> List.toArray // Aha, Arrays are mutable - we need that now since all those folds on a 1000*1000 List will take a *lot* of time
-    //let board2 = lines |> Array.fold (fun agg curr -> drawLine agg boardCoords curr ) board
     for line in lines do
         drawLineMutable boardArray boardCoords line
     boardArray
@@ -71,6 +68,5 @@ let part1 input =
 
 let part2 input =
     let (boardCoords, lines) = parseInput input
-    //printf "%O\n" (boardToString board2 size.X)
     let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length

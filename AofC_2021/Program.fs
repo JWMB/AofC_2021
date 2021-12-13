@@ -48,12 +48,11 @@ let generateReadMe (type_: Type) (aofcInfo: Tools.AofCSiteInfo.DayInfo) (basePat
             if methodResult.Contains("\n") then
                 $"\n```\n{methodResult}\n```"
             else $"`{methodResult}`"
-        $"### {method.Name}\n```\n{getSnippet method}\n```\nResult: {methodResultString}"
+        $"### {method.Name}\n```FSharp\n{getSnippet method}\n```\nResult: {methodResultString}"
 
     let input = getFileContent type_ "txt"
     $"""## [Day {aofcInfo.Day} - {aofcInfo.Title}]({aofcInfo.Url})
-[Source]({relativePath type_.Name + ".fs"})  
-[Input]({match getTypeFilePath type_ "txt" with | Some f -> relativePath f.Name | None -> ""})  
+[Source]({relativePath type_.Name + ".fs"}) | [Input]({match getTypeFilePath type_ "txt" with | Some f -> relativePath f.Name | None -> ""})  
 {getDayPartMethods type_ |> Array.map (fun f-> methodInfo input f) |> String.concat "\n"}
 """
 
