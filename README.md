@@ -410,7 +410,7 @@ let part2 input =
     let size = { X = br.X - tl.X; Y = br.Y - tl.Y }
     let mutable bm = [|0..size.Y|] |> Array.map (fun y -> [|0..size.X|] |> Array.map (fun x -> ' '))
 
-    for pt in folded do
+    for pt in folded |> Array.map (fun pt -> { X = pt.X - tl.X; Y = pt.Y - tl.Y }) do
         bm.[pt.Y].[pt.X] <- 'X'
 
     let str = bm |> Array.map (fun r -> r |> Array.map string |> String.concat "") |> String.concat "  \n"
