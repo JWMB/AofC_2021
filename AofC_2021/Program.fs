@@ -42,7 +42,10 @@ let generateReadMe (type_: Type) (aofcInfo: Tools.AofCSiteInfo.DayInfo) (basePat
         let m = Regex.Match(fsContent + "\nlet ", $@"(?<=\r|\n)let {method.Name}.+?(?=(\r|\n)let\s)", RegexOptions.Singleline)
         if m.Success then m.Value.Trim()
         else ""
-    let methodInfo input (method: Reflection.MethodInfo) = $"### {method.Name}\n```\n{getSnippet method}\n```\nResult: `{method.Invoke(null, [|input|])}`"
+    let methodInfo input (method: Reflection.MethodInfo) = 
+        let methodResult = method.Invoke(null, [|input|]).ToString()
+        let methodResultString = if methodResult.Contains("\n") then $"\n```\n{methodResult}\n```" else $"`{methodResult}`"
+        $"### {method.Name}\n```\n{getSnippet method}\n```\nResult: {methodResultString}"
 
     let input = getFileContent type_ "txt"
     $"""## [Day {aofcInfo.Day} - {aofcInfo.Title}]({aofcInfo.Url})
@@ -73,9 +76,10 @@ let writeReadme readmeFilename =
 
 [<EntryPoint>]
 let main argv =
-    let day = 12
+    let day = 13
 
     writeReadme "README.md"
+
     let dayType = getDayTypes.[day]
     let input = match getTypeFilePath dayType "txt" with
                 | Some fi -> File.ReadAllText(fi.FullName)

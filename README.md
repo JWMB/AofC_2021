@@ -386,3 +386,42 @@ let part2 input =
     distinct.Length
 ```
 Result: `118803`
+## [Day 13 - Transparent Origami](https://adventofcode.com/2021/day/13)
+[Source](AofC_2021/D13.fs)  
+[Input](AofC_2021/D13.txt)  
+### part1
+```
+let part1 input =
+    let data = parseInput input
+    let folded = fold data.Folds.[0] data.Points
+    folded |> Array.length
+```
+Result: `847`
+### part2
+```
+let part2 input =
+    let data = parseInput input
+    let folded = data.Folds |> Array.fold (fun agg curr -> fold curr agg) data.Points
+
+    let xs = folded |> Array.map (fun f -> f.X)
+    let ys = folded |> Array.map (fun f -> f.Y)
+    let tl = { X = xs |> Array.min; Y = ys |> Array.min; }
+    let br = { X = xs |> Array.max; Y = ys |> Array.max; }
+    let size = { X = br.X - tl.X; Y = br.Y - tl.Y }
+    let mutable bm = [|0..size.Y|] |> Array.map (fun y -> [|0..size.X|] |> Array.map (fun x -> ' '))
+
+    for pt in folded do
+        bm.[pt.Y].[pt.X] <- 'X'
+
+    let str = bm |> Array.map (fun r -> r |> Array.map string |> String.concat "") |> String.concat "  \n"
+    str
+```
+Result: 
+```
+XXX   XX  XXXX XXX   XX  XXXX  XX  XXX   
+X  X X  X    X X  X X  X X    X  X X  X  
+XXX  X      X  X  X X    XXX  X  X XXX   
+X  X X     X   XXX  X    X    XXXX X  X  
+X  X X  X X    X X  X  X X    X  X X  X  
+XXX   XX  XXXX X  X  XX  XXXX X  X XXX 
+```
