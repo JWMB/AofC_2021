@@ -90,20 +90,18 @@ let writeReadme readmeFilename =
 
 [<EntryPoint>]
 let main argv =
-    let slnDir = (findFileInParents2 "AofC.sln").Value.Directory
-    let projDir = slnDir.GetDirectories("AofC_2021").[0]
-    if System.Diagnostics.Debugger.IsAttached || (argv.Length > 0 && argv.[0] = "generate_readme") then
+    if (argv.Length > 0 && argv.[0] = "generate_readme") then
         printfn "Generating README.md"
         writeReadme "README.md"
+    else
+        let day = 14
+        let dayType = getDayTypes.[day]
+        let input = match getTypeFilePath dayType "txt" with
+                    | Some fi -> File.ReadAllText(fi.FullName)
+                    | None -> ""
 
-    let day = 13
-    let dayType = getDayTypes.[day]
-    let input = match getTypeFilePath dayType "txt" with
-                | Some fi -> File.ReadAllText(fi.FullName)
-                | None -> ""
+        let methods = getDayPartMethods dayType
+        let results = methods |> Seq.map (fun f -> $"{f.Name}: {f.Invoke(null, [|input|])}") |> Seq.toArray
 
-    let methods = getDayPartMethods dayType
-    let results = methods |> Seq.map (fun f -> $"{f.Name}: {f.Invoke(null, [|input|])}") |> Seq.toArray
-
-    printf "Result:\n%A\n" (results |> String.concat "\n")
+        printf "Result:\n%A\n" (results |> String.concat "\n")
     0

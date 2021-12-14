@@ -285,3 +285,32 @@ fold along x=5
 #...#
 #####"
     Assert.Equal(expected.Trim().Replace("\r", ""), pt2);
+
+
+[<Fact>]
+let ``D14`` () =
+    let input = "
+NNCB
+
+CH -> B
+HH -> N
+CB -> H
+NH -> C
+HB -> C
+HC -> B
+HN -> C
+NN -> C
+BH -> H
+NC -> B
+NB -> B
+BN -> B
+BB -> N
+BC -> B
+CC -> N
+CN -> C
+    "
+    let pt1 = D14.part1 input
+    Assert.Equal(1588, pt1);
+
+    let pt2 = D14.part2 input
+    Assert.Equal(2188189693529UL, pt2);
