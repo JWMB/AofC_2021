@@ -36,18 +36,18 @@ let part2 input =
     let (template, rules) = parseInput input
 
     let initiateFromTemplate str =
-        str |> Seq.toArray |> Array.windowed 2 |> Array.map (fun f -> f |> Array.map string |> String.concat "")
-            |> Array.filter (fun f-> rules.ContainsKey(f))
-            |> Array.map (fun f -> (f, 1UL))
-            |> Array.groupBy (fun f -> fst f) |> Array.map (fun f -> (fst f, (snd f) |> Array.sumBy (fun p -> snd p)))
+        str |> windowedStrings 2 |> Array.filter (fun f-> rules.ContainsKey(f))
+                            |> Array.map (fun f -> (f, 1UL))
+                            |> Array.groupBy (fun f -> fst f) |> Array.map (fun f -> (fst f, (snd f) |> Array.sumBy (fun p -> snd p)))
 
     let folder cntPerRule = 
         cntPerRule |>
             Array.map (fun kv ->
-                let xx = fst kv
+                let pair = fst kv
                 let currCnt = snd kv
-                if currCnt > 0UL && rules.ContainsKey(xx) then
-                    rules[xx] |> Array.map (fun mutation -> (mutation, currCnt))
+                let (found, mutations) = rules.TryGetValue pair
+                if currCnt > 0UL && found then
+                    mutations |> Array.map (fun mutation -> (mutation, currCnt))
                 else [||]
             ) |> Array.reduce Array.append |> Array.groupBy(fun f-> fst f) |> Array.map (fun f -> (fst f, (snd f) |> Array.sumBy (fun p -> snd p)))
 

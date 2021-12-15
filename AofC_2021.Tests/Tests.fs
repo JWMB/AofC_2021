@@ -314,3 +314,24 @@ CN -> C
 
     let pt2 = D14.part2 input
     Assert.Equal(2188189693529UL, pt2);
+    
+[<Fact>]
+let ``D15`` () =
+    let input = "
+1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581
+    "
+    let pt1 = D15.part1 input
+    Assert.Equal(40, pt1);
+    
+    let pt2 = D15.part2 input
+    Assert.Equal(315, pt2);
+  

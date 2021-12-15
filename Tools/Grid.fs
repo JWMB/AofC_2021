@@ -6,8 +6,8 @@ module GridTools =
         static member Zero = { X = 0; Y = 0 } 
 
     type Grid2D = { Size: Vector2D; TopLeft: Vector2D; } with
-        member this.BottomRight = this.TopLeft.Add(this.Size)
-        member this.IsValid pt = pt.X >= this.TopLeft.X && pt.Y >= this.TopLeft.Y && pt.X < this.BottomRight.X && pt.Y < this.BottomRight.Y
+        member this.BottomRight = this.TopLeft.Add({ X = this.Size.X-1; Y = this.Size.Y-1;})
+        member this.IsValid pt = pt.X >= this.TopLeft.X && pt.Y >= this.TopLeft.Y && pt.X <= this.BottomRight.X && pt.Y <= this.BottomRight.Y
         member this.IndexToPoint index = { X = index % this.Size.X; Y = index / this.Size.X }
         member this.PointToIndex pt = pt.Y * this.Size.X + pt.X
         static member FromCoordinates pts = 
