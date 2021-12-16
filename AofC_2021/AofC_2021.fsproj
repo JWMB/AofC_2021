@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="D16.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="D16.fs" />
     <Compile Include="D15.fs" />
     <Content Include="D15.txt" />
     <Content Include="D14.txt">

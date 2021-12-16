@@ -335,3 +335,29 @@ let ``D15`` () =
     let pt2 = D15.part2 input
     Assert.Equal(315, pt2);
   
+[<Fact>]
+let ``D16`` () =
+//    let p1Tests = [|
+//        ("8A004A801A8002F478", 16);
+//("620080001611562C8802118E34", 12);
+//("C0015000016115A2E0802F182340", 23);
+//("A0016C880162017C3686B18A3D4780", 31)
+//    |]
+    //Assert.Equal(16, (D16.part1 "8A004A801A8002F478"));
+    //Assert.Equal(12, (D16.part1 "620080001611562C8802118E34"));
+    //Assert.Equal(23, (D16.part1 "C0015000016115A2E0802F182340"));
+    //Assert.Equal(31, (D16.part1 "A0016C880162017C3686B18A3D4780"));
+    let p2Tests = [|
+        ("C200B40A82", 3UL);
+        ("04005AC33890", 54UL);
+        ("880086C3E88112", 7UL);
+        ("CE00C43D881120", 9UL);
+        ("D8005AC2A8F0", 1UL);
+        ("F600BC2D8F", 0UL);
+        ("9C005AC2F8F0", 0UL);
+        ("9C0141080250320F1802104A08", 1UL);
+    |]
+    for t in p2Tests do
+        let r = D16.part1 (fst t)
+        if r <> snd t then raise (new Exception($"Expected {snd t}, got {r} ({fst t})"))
+  

@@ -94,13 +94,13 @@ let main argv =
         printfn "Generating README.md"
         writeReadme "README.md"
     else
-        let day = 15
+        let day = 16
         let dayType = getDayTypes.[day]
         let input = match getTypeFilePath dayType "txt" with
                     | Some fi -> File.ReadAllText(fi.FullName)
                     | None -> ""
 
-        D15.part1 input |> ignore
+        D16.part1 input |> ignore
         //let methods = getDayPartMethods dayType
         //let results = methods |> Seq.map (fun f -> $"{f.Name}: {f.Invoke(null, [|input|])}") |> Seq.toArray
 
