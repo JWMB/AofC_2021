@@ -100,9 +100,8 @@ let main argv =
                     | Some fi -> File.ReadAllText(fi.FullName)
                     | None -> ""
 
-        D16.part1 input |> ignore
-        //let methods = getDayPartMethods dayType
-        //let results = methods |> Seq.map (fun f -> $"{f.Name}: {f.Invoke(null, [|input|])}") |> Seq.toArray
+        let methods = getDayPartMethods dayType
+        let results = methods |> Seq.map (fun f -> $"{f.Name}: {f.Invoke(null, [|input|])}") |> Seq.toArray
 
-        //printf "Result:\n%A\n" (results |> String.concat "\n")
+        printf "Result:\n%A\n" (results |> String.concat "\n")
     0

@@ -337,16 +337,16 @@ let ``D15`` () =
   
 [<Fact>]
 let ``D16`` () =
-//    let p1Tests = [|
-//        ("8A004A801A8002F478", 16);
-//("620080001611562C8802118E34", 12);
-//("C0015000016115A2E0802F182340", 23);
-//("A0016C880162017C3686B18A3D4780", 31)
-//    |]
-    //Assert.Equal(16, (D16.part1 "8A004A801A8002F478"));
-    //Assert.Equal(12, (D16.part1 "620080001611562C8802118E34"));
-    //Assert.Equal(23, (D16.part1 "C0015000016115A2E0802F182340"));
-    //Assert.Equal(31, (D16.part1 "A0016C880162017C3686B18A3D4780"));
+    let p1Tests = [|
+        ("8A004A801A8002F478", 16);
+        ("620080001611562C8802118E34", 12);
+        ("C0015000016115A2E0802F182340", 23);
+        ("A0016C880162017C3686B18A3D4780", 31)
+    |]
+    for t in p1Tests do
+        let r = D16.part1 (fst t)
+        if r <> snd t then raise (new Exception($"Expected {snd t}, got {r} ({fst t})"))
+
     let p2Tests = [|
         ("C200B40A82", 3UL);
         ("04005AC33890", 54UL);
@@ -358,6 +358,6 @@ let ``D16`` () =
         ("9C0141080250320F1802104A08", 1UL);
     |]
     for t in p2Tests do
-        let r = D16.part1 (fst t)
+        let r = D16.part2 (fst t)
         if r <> snd t then raise (new Exception($"Expected {snd t}, got {r} ({fst t})"))
   
