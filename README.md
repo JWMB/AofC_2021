@@ -82,7 +82,7 @@ let part2 input =
 
     goForthAndMultiply [| oxy; co2;|] lifeSupportCalc
 ```
-Result (in `3`ms): `4474944`
+Result (in `2`ms): `4474944`
 ## [Day 4 - Giant Squid](https://adventofcode.com/2021/day/4)
 [Source](AofC_2021/D4.fs) | [Input](AofC_2021/D4.txt)  
 ### part1
@@ -100,7 +100,7 @@ let part1 input =
                                 ) (boards, "")
     (getSumOfLeftovers firstWinner.[0]) * (int draw)
 ```
-Result (in `44`ms): `69579`
+Result (in `37`ms): `69579`
 ### part2
 ```FSharp
 let part2 input =
@@ -121,7 +121,7 @@ let part2 input =
         let sumOfLeftovers = getSumOfLeftovers lastWinner
         sumOfLeftovers * finalDraw
 ```
-Result (in `68`ms): `14877`
+Result (in `65`ms): `14877`
 ## [Day 5 - Hydrothermal Venture](https://adventofcode.com/2021/day/5)
 [Source](AofC_2021/D5.fs) | [Input](AofC_2021/D5.txt)  
 ### part1
@@ -131,7 +131,7 @@ let part1 input =
     let boardArray = drawLines boardCoords (lines |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y))
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `166`ms): `7297`
+Result (in `162`ms): `7297`
 ### part2
 ```FSharp
 let part2 input =
@@ -139,7 +139,7 @@ let part2 input =
     let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `203`ms): `21038`
+Result (in `193`ms): `21038`
 ## [Day 6 - Lanternfish](https://adventofcode.com/2021/day/6)
 [Source](AofC_2021/D6.fs) | [Input](AofC_2021/D6.txt)  
 ### part1
@@ -184,7 +184,7 @@ Result (in `0`ms): `1622533344325`
 let part1 input =
     calc (parseInput input) (fun p1 p2 -> abs(p1 - p2))
 ```
-Result (in `36`ms): `336040`
+Result (in `33`ms): `336040`
 ### part2
 ```FSharp
 let part2 input =
@@ -193,7 +193,7 @@ let part2 input =
         diff * (diff + 1) / 2
     )
 ```
-Result (in `36`ms): `94813675`
+Result (in `35`ms): `94813675`
 ## [Day 8 - Seven Segment Search](https://adventofcode.com/2021/day/8)
 [Source](AofC_2021/D8.fs) | [Input](AofC_2021/D8.txt)  
 ### part1
@@ -273,7 +273,7 @@ let part2 input =
     let sum = translatedOutput |> Array.sum
     sum
 ```
-Result (in `963`ms): `1043101`
+Result (in `937`ms): `1043101`
 ## [Day 9 - Smoke Basin](https://adventofcode.com/2021/day/9)
 [Source](AofC_2021/D9.fs) | [Input](AofC_2021/D9.txt)  
 ### part1
@@ -282,7 +282,7 @@ let part1 input =
     let map = createDepthMap input
     map.findLowPoints |> Array.map map.getAtPoint |> Array.map (fun f -> f + 1) |> Array.sum
 ```
-Result (in `12`ms): `535`
+Result (in `11`ms): `535`
 ### part2
 ```FSharp
 let part2 input =
@@ -296,7 +296,7 @@ let part2 input =
     let top3 = basinsBySize |> Array.take 3
     top3 |> Array.map (fun f -> f.Length) |> Array.reduce (fun agg curr -> agg * curr)
 ```
-Result (in `836`ms): `1122700`
+Result (in `831`ms): `1122700`
 ## [Day 10 - Syntax Scoring](https://adventofcode.com/2021/day/10)
 [Source](AofC_2021/D10.fs) | [Input](AofC_2021/D10.txt)  
 ### part1
@@ -338,7 +338,7 @@ let part1 input =
                                     ) (data.Values, 0)
     numFlashes
 ```
-Result (in `25`ms): `1679`
+Result (in `24`ms): `1679`
 ### part2
 ```FSharp
 let part2 input =
@@ -349,7 +349,7 @@ let part2 input =
         else folder state step + 1
     folder data.Values 1
 ```
-Result (in `67`ms): `519`
+Result (in `63`ms): `519`
 ## [Day 12 - Passage Pathing](https://adventofcode.com/2021/day/12)
 [Source](AofC_2021/D12.fs) | [Input](AofC_2021/D12.txt)  
 ### part1
@@ -359,7 +359,7 @@ let part1 input =
     let paths = evaluate pairs (fun f ->  if f.ToUpper() = f then -1 else 1)
     paths.Length
 ```
-Result (in `89`ms): `4413`
+Result (in `88`ms): `4413`
 ### part2
 ```FSharp
 let part2 input =
@@ -372,7 +372,7 @@ let part2 input =
     let distinct = allPaths |> Array.reduce Array.append |> Array.distinct
     distinct.Length
 ```
-Result (in `2033`ms): `118803`
+Result (in `1988`ms): `118803`
 ## [Day 13 - Transparent Origami](https://adventofcode.com/2021/day/13)
 [Source](AofC_2021/D13.fs) | [Input](AofC_2021/D13.txt)  
 ### part1
@@ -425,7 +425,7 @@ let part1 input =
     let cntByCharSorted = folded |> Seq.toArray |> Array.groupBy (fun f -> f) |> Array.map (fun f -> (fst f, (snd f).Length)) |> Array.sortBy (fun f -> snd f)
     (snd (Array.last cntByCharSorted) - (snd cntByCharSorted.[0]))
 ```
-Result (in `21`ms): `2447`
+Result (in `19`ms): `2447`
 ### part2
 ```FSharp
 let part2 input =
@@ -474,7 +474,7 @@ let part1 (input: string) =
 
     fst info
 ```
-Result (in `81`ms): `811`
+Result (in `85`ms): `811`
 ### part2
 ```FSharp
 let part2 (input: string) =
@@ -487,4 +487,54 @@ let part2 (input: string) =
 
     fst info
 ```
-Result (in `1986`ms): `3012`
+Result (in `1831`ms): `3012`
+## [Day 16 - Packet Decoder](https://adventofcode.com/2021/day/16)
+[Source](AofC_2021/D16.fs) | [Input](AofC_2021/D16.txt)  
+### part1
+```FSharp
+let part1 (input:string) =
+    let bin = parseInput input
+    let (_, root) = parsePackage bin 0
+
+    let flatten (packet) = 
+        let rec loop (p: Packet) = seq {
+            yield p
+            match p.Content with
+            | Value v -> ()
+            | Op o ->
+                for c in o.Children do
+                    yield! loop c
+        }
+
+        loop packet |> Seq.toArray
+
+    let flattened = flatten root
+    let versionSum = flattened |> Array.sumBy (fun f -> f.Header.Version)
+    versionSum
+```
+Result (in `9`ms): `943`
+### part2
+```FSharp
+let part2 (input:string) =
+    let bin = parseInput input
+    let (_, root) = parsePackage bin 0
+
+    let rec reducer node =
+        match node.Content with
+        | Value v -> v.Value
+        | Op o ->
+            let childValues = o.Children |> Array.map (fun f -> reducer f)
+            match node.Header.TypeId with
+            | 0 -> childValues |> Array.sum
+            | 1 -> childValues |> Array.reduce (fun p c -> p * c)
+            | 2 -> childValues |> Array.min
+            | 3 -> childValues |> Array.max
+            | 5 -> if childValues.[0] > childValues.[1] then 1UL else 0UL
+            | 6 -> if childValues.[0] < childValues.[1]  then 1UL else 0UL
+            | 7 -> if childValues.[0] = childValues.[1]  then 1UL else 0UL
+            | _ -> raise (new System.Exception("Unknown type"))
+            
+    let result = reducer root
+    result
+```
+Result (in `1`ms): `167737115857`
