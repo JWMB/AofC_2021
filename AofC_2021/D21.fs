@@ -1,7 +1,7 @@
 ﻿module D21
 
 open System.Text.RegularExpressions
-open System.Diagnostics
+open FSharp.Collections.ParallelSeq
 
 type Player = { Position: int; Score: int }
 
@@ -91,29 +91,35 @@ let part2 input =
     let numThrowsPerTurn = 3
 
     let allCombosPerTurn = permutations numThrowsPerTurn [1..diracDieSides]
-    let countsBySum = Map (allCombosPerTurn |> List.groupBy (fun f -> f |> List.sum) |> List.map (fun (sum, org) -> (sum, org.Length)))
+    let countsBySum = allCombosPerTurn |> List.groupBy (fun f -> f |> List.sum) |> List.map (fun (sum, org) -> (sum, org.Length))
     let winAt = 21
 
-    let rec loop turn numUniverses (players: Player list) = seq {
-            for outcome in countsBySum do
-                let (newP, modified) = update (turn % 2) outcome.Key players
+    let rec loop turn numUniverses (players: Player list) (cbs: (int * int) list) = seq {
+            for (sum, count) in cbs do
+                let (newP, modified) = update (turn % 2) sum players
                 if newP.Score >= winAt then
                     let winner = if modified[0].Score > modified[1].Score then 0 else 1
-                    yield (winner, numUniverses * (uint64 outcome.Value))
+                    yield (winner, numUniverses * (uint64 count))
                 else
-                    yield! loop (turn + 1) (numUniverses * (uint64 outcome.Value)) modified
+                    yield! loop (turn + 1) (numUniverses * (uint64 count)) modified countsBySum
         }
 
-    let seq = loop 0 1UL players
+    let foldWins s =
+        s |> Seq.fold (fun (agg: uint64 list) (winner, numUniverses) ->
+            let ulWinner = uint64 winner
+            let newWins = [
+                agg[0] + ((1UL - ulWinner) * numUniverses);
+                agg[1] + (ulWinner * numUniverses);
+            ]
+            newWins
+            ) [0UL; 0UL;]
 
-    let xxx = seq |> Seq.fold (fun (agg: uint64 list) (winner, numUniverses) ->
-                                                    let ulWinner = uint64 winner
-                                                    let newWins = [
-                                                        agg[0] + ((1UL - ulWinner) * numUniverses);
-                                                        agg[1] + (ulWinner * numUniverses);
-                                                    ]
-                                                    newWins
-                                                    ) [0UL; 0UL;]
-    let result = xxx |> List.max
-    
+    let resultSets = countsBySum 
+                        |> PSeq.map (fun k -> 
+                            let s = loop 0 1UL players [k]
+                            s |> foldWins
+                        )
+    let wins = resultSets |> PSeq.toList |> List.reduce (fun p c -> [p[0]+c[0]; p[1]+c[1];])
+    let result = wins |> List.max
+
     result
