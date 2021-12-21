@@ -74,10 +74,21 @@ type Scanner(points: Vector3D list) =
         let expanded = (expanded1 |> List.append expanded2)
         expanded |> List.groupBy(fun (id, _) -> id) |> List.map (fun f -> (fst f, snd f |> List.map(fun sub -> snd sub) |> List.sortBy (fun (a, b) -> b)))// |> List.sortBy (fun f -> f)
 
-//let rotatePoints (pts: Vector3D list) num90Steps =
-let intersect l1 l2 = Set.intersect (Set.ofList l1) (Set.ofList l2) |> Set.toList
+
+let to2DString zoomOut (pts: Vector3D list) =
+    let grid = Grid3D.FromCoordinates (pts |> List.toArray)
+    [0..(grid.Size.Y-1)/zoomOut] |> List.map (fun yStep ->
+        let y = yStep * zoomOut + grid.Top
+        let ptsOnY = pts |> List.filter (fun pt -> pt.Y - y >= 0 && pt.Y - y < zoomOut)
+        [0..(grid.Size.X-1)/zoomOut] |> List.map (fun xStep ->
+            let x = xStep * zoomOut + grid.Left
+            if ptsOnY |> List.filter(fun pt -> pt.X - x >= 0 && pt.X - x < zoomOut) |> List.length > 0 then "#" else "."
+        ) |> String.concat ""
+    ) |> String.concat "\n"
 
 let pointsToString pts = pts |> List.map (fun pt -> $"{pt.X},{pt.Y},{pt.Z}") |> String.concat "\n"
+
+let intersect l1 l2 = Set.intersect (Set.ofList l1) (Set.ofList l2) |> Set.toList
 
 let allTransformationCombos =
     let axisSignVariations = (permutations 3 [-1;1;]) |> List.map (fun f -> { X = f[0]; Y = f[1]; Z = f[2]; })
@@ -92,10 +103,8 @@ let getDistances lst =
     let start = lst |> List.head
     lst |> List.map (fun (pt: Vector3D) -> (pt.Sub start).Length)
 
-let part1 input =
-    let data = parseInput input
-    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
 
+let analyzeScannerData (scanners: Map<int, Scanner>) =
     let align scannerId1 scannerId2 numOverlappingRequired =
         let pts1ToOthers = scanners[scannerId1].DistancesOneToOthers
         let pts2ToOthers = scanners[scannerId2].DistancesOneToOthers
@@ -104,7 +113,6 @@ let part1 input =
             pts1ToOthers |> List.map (fun (i1, dists1) -> 
                     let overlaps = pts2ToOthers |> List.map (fun (i2, dists2) -> 
                         let overlap = intersect (dists1 |> List.map(fun f -> snd f)) (dists2 |> List.map(fun f -> snd f))
-                        //printfn $"{i1}->{i2} {overlap.Length}"
                         if overlap.Length >= numOverlappingRequired-1 then
                             let getOverlappingPoints ptIndexDistPairs =
                                 ptIndexDistPairs |> List.filter(fun (_, dist) -> overlap |> List.contains dist) |> List.map (fun (ptIndex, _) -> ptIndex)
@@ -117,7 +125,7 @@ let part1 input =
                 ) |> List.reduce List.append
 
         if ptsWithSimilarDistances.Length >= numOverlappingRequired-1 then
-            printfn $"Similars: {scannerId1}->{scannerId2} {ptsWithSimilarDistances.Length}"
+            //printfn $"Similars: {scannerId1}->{scannerId2} {ptsWithSimilarDistances.Length}"
             // Might have "false positives" - filter out those 
             let countById nested = nested |> List.reduce List.append |> List.groupBy (fun f -> f) |> List.map (fun (key, grp) -> (key, grp.Length))
             let getMajorityIds nested =
@@ -163,7 +171,6 @@ let part1 input =
                     let ((rot, signs), transformed) = found.Value
                     let transformFunction2to1 (pt: Vector3D) = (transformer rot signs (pt.Sub points2[0])).Add points1[0]
 
-                    //let invSigns = signs.Mult (Vector3D.One.MultScalar -1)
                     let invRot = [0;1;2;] |> List.map (fun f-> rot |> List.findIndex (fun ff -> ff = f))
                     //e.g. XYZ -> [2,0,1]-> ZXY -> [1,2,0]
 
@@ -183,6 +190,22 @@ let part1 input =
                     Some((matchedIndices.Value, (transformFunction1to2, transformFunction2to1)))
         else None
 
+    let scannerCombos = scanners.Keys |> Seq.toList |> combinations 2
+
+    let numOverlapRequired = 12
+
+    let matchedScannerPoints = scannerCombos
+                                |> List.map (fun ls -> 
+                                    let id1 = ls[0]
+                                    let id2 = ls[1]
+                                    let aligned = align id1 id2 numOverlapRequired
+                                    if aligned.IsSome then
+                                        let ((indices1, indices2), (transformFunction1to2, transformFunction2to1)) = aligned.Value
+                                        Some((id1, indices1, transformFunction1to2), (id2, indices2, transformFunction2to1))
+                                    else
+                                        None
+                                ) |> List.filter(fun f -> f.IsSome) |> List.map(fun f -> f.Value)
+    matchedScannerPoints
     //// Possible optimization:
     //let numScanners = scanners.Keys.Count
     //let allOverlaps = [0..numScanners-2] |> List.map (fun id1 ->
@@ -203,19 +226,29 @@ let part1 input =
     //    (id1, found)
     //)
 
-    let scannerCombos = scanners.Keys |> Seq.toList |> combinations 2
-    let matchedScannerPoints = scannerCombos
-                                |> List.map (fun ls -> 
-                                    let id1 = ls[0]
-                                    let id2 = ls[1]
-                                    let aligned = align id1 id2 12
-                                    //printfn "%A %O" ls aligned.IsSome
-                                    if aligned.IsSome then
-                                        let ((indices1, indices2), (transformFunction1to2, transformFunction2to1)) = aligned.Value
-                                        Some((id1, indices1, transformFunction1to2), (id2, indices2, transformFunction2to1))
-                                    else
-                                        None
-                                ) |> List.filter(fun f -> f.IsSome) |> List.map(fun f -> f.Value)
+let bruteCompare (scanners: Map<int, Scanner>) id1 id2 numOverlappingRequired =
+    let pts1 = scanners[id1].Points |> List.map (fun pt -> pt.Sub scanners[id1].Points[0])
+    let pts2 = scanners[id2].Points |> List.map (fun pt -> pt.Sub scanners[id2].Points[0])
+
+    let results = allTransformationCombos 
+                    |> List.map (fun (rot, signs) -> 
+                        let xformed = pts2 |> List.map(fun pt -> transformer rot signs pt)
+                        pts1 |> List.map (fun pt1 -> 
+                            let moved1 = pts1 |> List.map (fun p -> p.Sub pt1)
+                            xformed |> List.map (fun pt2 ->
+                                let moved2 = xformed |> List.map (fun p -> p.Sub pt2)
+                                intersect moved1 moved2
+                            ) |> List.filter (fun overlap -> overlap.Length >= numOverlappingRequired)
+                        ) |> List.filter(fun f -> f.Length > 0)
+                    ) |> List.filter(fun f -> f.Length > 0)
+
+    if results.Length > 0 then (results |> List.reduce List.append) else []
+
+let part1 input =
+    let data = parseInput input
+    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
+
+    let matchedScannerPoints = analyzeScannerData scanners
 
     let findConnections id = 
         matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
@@ -227,19 +260,46 @@ let part1 input =
             let newVisited = [id] |> List.append visited
             for conn in connections do
                 let (idSub, indices, xform) = conn
-                let points = indices |> List.map (fun i -> scanners[idSub].Points[i])
-                let newXforms = [xform] |> List.append xforms
+                let points = scanners[idSub].Points
+                let newXforms = xforms |> List.append [xform] 
                 let xformed = newXforms |> List.fold(fun agg curr -> agg |> List.map curr ) points
                 yield xformed
                 yield! loop idSub newVisited newXforms
         }
-
-    let allPoints = (loop 0 [] []) |> Seq.toList |> List.reduce List.append |> List.distinct |> List.sortBy (fun pt -> pt.X)
-    let sss = pointsToString allPoints
-    //let reduced = matchedScannerPoints 
-    //                //|> List.map (fun ((scannerId1, scannerId2), (pointIds1, pointIds2)) ->
-    //                |> List.map (fun ((scannerId1, pointIds1, x1to2), (scannerId2, pointIds2, x2to1)) ->
-    //                    pointIds1 |> List.map (fun p -> (scannerId1, p)) |> List.append (pointIds2 |> List.map (fun p -> (scannerId2, p)))
-    //                ) |> List.reduce List.append |> List.distinct |> List.sortBy (fun (scannerId, _) -> scannerId)
+    let startId = 0
+    let allPoints = (loop startId [] []) |> Seq.toList |> List.reduce List.append |> List.append (scanners[startId].Points) |> List.distinct
 
     allPoints.Length
+    
+let part2 input =
+    let data = parseInput input
+    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
+
+    let matchedScannerPoints = analyzeScannerData scanners
+
+    let findConnections id = 
+        matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
+            id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
+    
+    let rec loop id visited xforms =
+        seq {
+            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
+            let newVisited = [id] |> List.append visited
+            for conn in connections do
+                let (idSub, _, xform) = conn
+                let newXforms = xforms |> List.append [xform]
+                let xxx = newXforms |> List.fold(fun agg curr -> curr agg) Vector3D.Zero
+                yield xxx
+                yield! loop idSub newVisited newXforms
+        }
+    let startId = 0
+    let allPoints = (loop startId [] []) |> Seq.toList |> List.distinct
+
+    let allTaxiLengths = (allPoints |> combinations 2)
+                            |> List.map(fun lst -> 
+                                let diff = lst[0].Sub lst[1]
+                                let taxiLength = System.Math.Abs(diff.X) + System.Math.Abs(diff.Y) + System.Math.Abs(diff.Z)
+                                taxiLength
+                            ) |> List.sort |> List.rev
+
+    allTaxiLengths |> List.head

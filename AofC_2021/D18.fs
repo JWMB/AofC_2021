@@ -198,16 +198,21 @@ let reduce (number: Number) =
                 n2
     loop number
 
-let part1 (input: string) =
-    let numbers = Regex.Split(input.Trim(), @"\r?\n\s*") |> Array.map (fun r -> r.Trim()) |> Array.map parseNumber
+let parseInput (input: string) =
+    Regex.Split(input.Trim(), @"\r?\n\s*") |> Array.map (fun r -> r.Trim()) |> Array.map parseNumber
 
-    // part 1:
+let part1 input =
+    let numbers = parseInput input //Regex.Split(input.Trim(), @"\r?\n\s*") |> Array.map (fun r -> r.Trim()) |> Array.map parseNumber
+
     let final = numbers |> Array.reduce (fun p c -> 
         let next = reduce (add p c)
         //printfn "%O" (next.ToNestedString)
         next
     )
-    let mag = calcMagnitude final
+    calcMagnitude final
+
+let part2 input =
+    let numbers = parseInput input //Regex.Split(input.Trim(), @"\r?\n\s*") |> Array.map (fun r -> r.Trim()) |> Array.map parseNumber
 
     // part 2:    // [0..numbers.Length-2] |> List.map (fun a -> [(a+1)..numbers.Length-1]
     let combos = [0..numbers.Length-1] |> List.map (fun a -> [0..numbers.Length-1] |> List.map (fun b -> (numbers[a], numbers[b]))) |> List.reduce List.append

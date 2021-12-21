@@ -16,8 +16,7 @@ let parseInput (input: string) =
     |])
 
 
-let part1 (input: string) = 
-    //let input = "target area: x=20..30, y=-10..-5"
+let part2 (input: string) = 
     let target = parseInput input
 
     let velocityAfterStep initial step =
@@ -36,11 +35,10 @@ let part1 (input: string) =
         loop pos vel
 
     let getTriangularNumber step = ((step+1) * step) / 2
-    // X must be such that it touches the rect
-    //TODO: equation instead of brute-force
-    let maxXToReach = [|1..target.BottomRight.X|] |> Array.filter(fun f ->
-        let tri = getTriangularNumber f
-        if tri < target.BottomRight.X && tri >= target.TopLeft.X then true else false)
+    //TODO: equation instead of brute-force?
+    //let maxXToReach = [|1..target.BottomRight.X|] |> Array.filter(fun f ->
+    //    let tri = getTriangularNumber f
+    //    if tri < target.BottomRight.X && tri >= target.TopLeft.X then true else false)
 
     let possibleXs = [|1..target.BottomRight.X|] |> Array.filter(fun velX ->
         let isInside x = x >= target.Left && x <= target.Right
@@ -53,14 +51,13 @@ let part1 (input: string) =
     )
 
     let combos = possibleXs |> Array.map (fun velX ->
-        let popo = [|-1000..1000|] |> Array.map (fun velY -> 
+        let velYsAndHits = [|-1000..1000|] |> Array.map (fun velY -> 
             let r = simulate Vector2D.Zero { X = velX; Y = velY }
             (velY, r)
         )
-        let found = popo |> Array.filter(fun f -> (snd f).IsSome) |> Array.map(fun f -> fst f)
+        let found = velYsAndHits |> Array.filter(fun f -> (snd f).IsSome) |> Array.map(fun f -> fst f)
         found |> Array.map (fun velY -> { X = velX; Y = velY; })
     )                               
     let flattened = combos |> Array.reduce Array.append
-
+    flattened.Length
     //let s = getTriangularNumber sss
-    combos

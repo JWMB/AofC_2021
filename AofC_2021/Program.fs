@@ -100,7 +100,7 @@ let main argv =
                     | Some fi -> File.ReadAllText(fi.FullName)
                     | None -> ""
 
-        D19.part1 input |> ignore
+        D19.part2 input |> ignore
         //let methods = getDayPartMethods dayType
         //let results = methods |> Seq.map (fun f -> $"{f.Name}: {f.Invoke(null, [|input|])}") |> Seq.toArray
 

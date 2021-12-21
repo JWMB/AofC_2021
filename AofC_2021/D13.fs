@@ -63,7 +63,7 @@ let part2 input =
     let folded = data.Folds |> Array.fold (fun agg curr -> fold curr agg) data.Points
 
     let grid = Grid2D.FromCoordinates folded
-    let mutable bm = [|0..grid.Size.Y|] |> Array.map (fun y -> [|0..grid.Size.X|] |> Array.map (fun x -> '.'))
+    let mutable bm = [|0..grid.Size.Y-1|] |> Array.map (fun y -> [|0..grid.Size.X-1|] |> Array.map (fun x -> '.'))
 
     for pt in folded |> Array.map (fun pt -> { X = pt.X - grid.TopLeft.X; Y = pt.Y - grid.TopLeft.Y }) do
         bm.[pt.Y].[pt.X] <- '#'
