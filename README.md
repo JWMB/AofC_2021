@@ -100,7 +100,7 @@ let part1 input =
                                 ) (boards, "")
     (getSumOfLeftovers firstWinner.[0]) * (int draw)
 ```
-Result (in `43`ms): `69579`
+Result (in `38`ms): `69579`
 ### part2
 ```FSharp
 let part2 input =
@@ -121,7 +121,7 @@ let part2 input =
         let sumOfLeftovers = getSumOfLeftovers lastWinner
         sumOfLeftovers * finalDraw
 ```
-Result (in `79`ms): `14877`
+Result (in `67`ms): `14877`
 ## [Day 5 - Hydrothermal Venture](https://adventofcode.com/2021/day/5)
 [Source](AofC_2021/D5.fs) | [Input](AofC_2021/D5.txt)  
 ### part1
@@ -131,7 +131,7 @@ let part1 input =
     let boardArray = drawLines boardCoords (lines |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y))
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `176`ms): `7297`
+Result (in `157`ms): `7297`
 ### part2
 ```FSharp
 let part2 input =
@@ -139,7 +139,7 @@ let part2 input =
     let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `210`ms): `21038`
+Result (in `191`ms): `21038`
 ## [Day 6 - Lanternfish](https://adventofcode.com/2021/day/6)
 [Source](AofC_2021/D6.fs) | [Input](AofC_2021/D6.txt)  
 ### part1
@@ -157,7 +157,7 @@ let part1 input =
                 ) school
     final.Length
 ```
-Result (in `87`ms): `358214`
+Result (in `78`ms): `358214`
 ### part2
 ```FSharp
 let part2 input =
@@ -184,7 +184,7 @@ Result (in `0`ms): `1622533344325`
 let part1 input =
     calc (parseInput input) (fun p1 p2 -> abs(p1 - p2))
 ```
-Result (in `33`ms): `336040`
+Result (in `32`ms): `336040`
 ### part2
 ```FSharp
 let part2 input =
@@ -212,7 +212,7 @@ let part1 input =
     let counts = outputLengths |> Array.filter (fun f -> singleInstanceSegmentCounts |> Array.contains f ) |> Array.length
     counts
 ```
-Result (in `31`ms): `445`
+Result (in `33`ms): `445`
 ### part2
 ```FSharp
 let part2 input =
@@ -273,7 +273,7 @@ let part2 input =
     let sum = translatedOutput |> Array.sum
     sum
 ```
-Result (in `963`ms): `1043101`
+Result (in `955`ms): `1043101`
 ## [Day 9 - Smoke Basin](https://adventofcode.com/2021/day/9)
 [Source](AofC_2021/D9.fs) | [Input](AofC_2021/D9.txt)  
 ### part1
@@ -282,7 +282,7 @@ let part1 input =
     let map = createDepthMap input
     map.findLowPoints |> Array.map map.getAtPoint |> Array.map (fun f -> f + 1) |> Array.sum
 ```
-Result (in `13`ms): `535`
+Result (in `12`ms): `535`
 ### part2
 ```FSharp
 let part2 input =
@@ -296,7 +296,7 @@ let part2 input =
     let top3 = basinsBySize |> Array.take 3
     top3 |> Array.map (fun f -> f.Length) |> Array.reduce (fun agg curr -> agg * curr)
 ```
-Result (in `837`ms): `1122700`
+Result (in `838`ms): `1122700`
 ## [Day 10 - Syntax Scoring](https://adventofcode.com/2021/day/10)
 [Source](AofC_2021/D10.fs) | [Input](AofC_2021/D10.txt)  
 ### part1
@@ -324,7 +324,7 @@ let part2 (input: string) =
                 |> Array.sort
     part2.[part2.Length / 2]
 ```
-Result (in `8`ms): `4361305341`
+Result (in `7`ms): `4361305341`
 ## [Day 11 - Dumbo Octopus](https://adventofcode.com/2021/day/11)
 [Source](AofC_2021/D11.fs) | [Input](AofC_2021/D11.txt)  
 ### part1
@@ -338,7 +338,7 @@ let part1 input =
                                     ) (data.Values, 0)
     numFlashes
 ```
-Result (in `25`ms): `1679`
+Result (in `24`ms): `1679`
 ### part2
 ```FSharp
 let part2 input =
@@ -349,7 +349,7 @@ let part2 input =
         else folder state step + 1
     folder data.Values 1
 ```
-Result (in `67`ms): `519`
+Result (in `65`ms): `519`
 ## [Day 12 - Passage Pathing](https://adventofcode.com/2021/day/12)
 [Source](AofC_2021/D12.fs) | [Input](AofC_2021/D12.txt)  
 ### part1
@@ -359,7 +359,7 @@ let part1 input =
     let paths = evaluate pairs (fun f ->  if f.ToUpper() = f then -1 else 1)
     paths.Length
 ```
-Result (in `91`ms): `4413`
+Result (in `88`ms): `4413`
 ### part2
 ```FSharp
 let part2 input =
@@ -372,7 +372,7 @@ let part2 input =
     let distinct = allPaths |> Array.reduce Array.append |> Array.distinct
     distinct.Length
 ```
-Result (in `2055`ms): `118803`
+Result (in `1978`ms): `118803`
 ## [Day 13 - Transparent Origami](https://adventofcode.com/2021/day/13)
 [Source](AofC_2021/D13.fs) | [Input](AofC_2021/D13.txt)  
 ### part1
@@ -474,7 +474,7 @@ let part1 (input: string) =
 
     fst info
 ```
-Result (in `85`ms): `811`
+Result (in `84`ms): `811`
 ### part2
 ```FSharp
 let part2 (input: string) =
@@ -487,7 +487,7 @@ let part2 (input: string) =
 
     fst info
 ```
-Result (in `1925`ms): `3012`
+Result (in `1856`ms): `3012`
 ## [Day 16 - Packet Decoder](https://adventofcode.com/2021/day/16)
 [Source](AofC_2021/D16.fs) | [Input](AofC_2021/D16.txt)  
 ### part1
@@ -557,7 +557,7 @@ let part1 input =
     let maxVel = velYsAndHits |> Array.map(fun (velY, _) -> velY) |> Array.max
     getTriangularNumber maxVel
 ```
-Result (in `5`ms): `5050`
+Result (in `9`ms): `5050`
 ### part2
 ```FSharp
 let part2 input = 
@@ -585,7 +585,7 @@ let part2 input =
     let flattened = combos |> Array.reduce Array.append
     flattened.Length
 ```
-Result (in `673`ms): `5945`
+Result (in `655`ms): `5945`
 ## [Day 18 - Snailfish](https://adventofcode.com/2021/day/18)
 [Source](AofC_2021/D18.fs) | [Input](AofC_2021/D18.txt)  
 ### part1
@@ -600,7 +600,7 @@ let part1 input =
     )
     calcMagnitude final
 ```
-Result (in `475`ms): `4124`
+Result (in `468`ms): `4124`
 ### part2
 ```FSharp
 let part2 input =
@@ -616,7 +616,7 @@ let part2 input =
     // 4549 too low
     diff
 ```
-Result (in `6592`ms): `4673`
+Result (in `6525`ms): `4673`
 ## [Day 19 - Beacon Scanner](https://adventofcode.com/2021/day/19)
 [Source](AofC_2021/D19.fs) | [Input](AofC_2021/D19.txt)  
 ### part1
@@ -625,55 +625,28 @@ let part1 input =
     let data = parseInput input
     let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
 
-    let matchedScannerPoints = analyzeScannerData scanners
-
-    let findConnections id = 
-        matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
-            id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
-    
-    let rec loop id visited xforms =
-        seq {
-            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
-            let newVisited = [id] |> List.append visited
-            for conn in connections do
-                let (idSub, indices, xform) = conn
-                let points = scanners[idSub].Points
-                let newXforms = xforms |> List.append [xform] 
-                let xformed = newXforms |> List.fold(fun agg curr -> agg |> List.map curr ) points
-                yield xformed
-                yield! loop idSub newVisited newXforms
-        }
     let startId = 0
-    let allPoints = (loop startId [] []) |> Seq.toList |> List.reduce List.append |> List.append (scanners[startId].Points) |> List.distinct
+    let orderedTransforms = getOrderedScannerPairsWithTransform scanners startId
+    let allPoints = orderedTransforms 
+                    |> Seq.map (fun ((_, id2), transformer) -> 
+                        transformer scanners[id2].Points
+                    ) |> Seq.toList |> List.reduce List.append |> List.append (scanners[startId].Points) |> List.distinct
 
     allPoints.Length
 ```
-Result (in `5100`ms): `376`
+Result (in `899`ms): `376`
 ### part2
 ```FSharp
 let part2 input =
     let data = parseInput input
     let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
 
-    let matchedScannerPoints = analyzeScannerData scanners
-
-    let findConnections id = 
-        matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
-            id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
-    
-    let rec loop id visited xforms =
-        seq {
-            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
-            let newVisited = [id] |> List.append visited
-            for conn in connections do
-                let (idSub, _, xform) = conn
-                let newXforms = xforms |> List.append [xform]
-                let scannerLocation = newXforms |> List.fold(fun agg curr -> curr agg) Vector3D.Zero
-                yield scannerLocation
-                yield! loop idSub newVisited newXforms
-        }
     let startId = 0
-    let allPoints = (loop startId [] []) |> Seq.toList |> List.distinct
+    let orderedTransforms = getOrderedScannerPairsWithTransform scanners startId
+    let allPoints = orderedTransforms 
+                    |> Seq.map (fun ((_, id2), transformer) -> 
+                        transformer [Vector3D.Zero;]
+                    ) |> Seq.toList |> List.reduce List.append |> List.append ([Vector3D.Zero]) |> List.distinct
 
     let allTaxiLengths = (allPoints |> combinations 2)
                             |> List.map(fun lst -> 
@@ -684,7 +657,7 @@ let part2 input =
 
     allTaxiLengths |> List.head
 ```
-Result (in `742`ms): `10772`
+Result (in `744`ms): `10772`
 ## [Day 20 - Trench Map](https://adventofcode.com/2021/day/20)
 [Source](AofC_2021/D20.fs) | [Input](AofC_2021/D20.txt)  
 ### part1
@@ -707,7 +680,7 @@ let part2 input =
     let num1s = final |> Array.map (fun row -> row |> Array.filter (fun v -> v = 1) |> Array.length) |> Array.sum
     num1s
 ```
-Result (in `2275`ms): `15714`
+Result (in `2423`ms): `15714`
 ## [Day 21 - Dirac Dice](https://adventofcode.com/2021/day/21)
 [Source](AofC_2021/D21.fs) | [Input](AofC_2021/D21.txt)  
 ### part1
@@ -777,4 +750,4 @@ let part2 input =
 
     result
 ```
-Result (in `14488`ms): `49982165861983`
+Result (in `14703`ms): `49982165861983`
