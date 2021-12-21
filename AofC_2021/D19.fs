@@ -92,7 +92,8 @@ let intersect l1 l2 = Set.intersect (Set.ofList l1) (Set.ofList l2) |> Set.toLis
 
 let allTransformationCombos =
     let axisSignVariations = (permutations 3 [-1;1;]) |> List.map (fun f -> { X = f[0]; Y = f[1]; Z = f[2]; })
-    let rotations = permute [0;1;2;] //Stupid - yields several identical results
+    //let rotations = [[0;1;2;]; [0;2;1]; [1;0;2;]; [2;0;1;]; ] 
+    let rotations = permute [0;1;2;] //Stupid - yields several identical results, no?
     axisSignVariations |> List.map (fun signs -> rotations |> List.map (fun rot -> (rot, signs))) |> List.reduce List.append
     
 let transformer rotation signs (pt: Vector3D) =
@@ -103,6 +104,19 @@ let getDistances lst =
     let start = lst |> List.head
     lst |> List.map (fun (pt: Vector3D) -> (pt.Sub start).Length)
 
+
+let getAllDistanceOverlaps (scanners: Map<int, Scanner>) =
+    let numScanners = scanners.Keys.Count
+    let allOverlaps = [0..numScanners-2] |> List.map (fun id1 ->
+        let id1Dists = scanners[id1].AllDistances
+        let overlaps = [(id1+1)..numScanners-1] |> List.map (fun id2 -> 
+            let id2Dists = scanners[id2].AllDistances
+            let overlap = intersect id1Dists id2Dists
+            (id2, overlap.Length)
+        )
+        (id1, overlaps |> List.sortBy (fun f -> snd f) |> List.rev)
+    )
+    allOverlaps |> List.sortBy (fun (id, overlaps) -> snd (overlaps |> List.head)) |> List.rev
 
 let analyzeScannerData (scanners: Map<int, Scanner>) =
     let align scannerId1 scannerId2 numOverlappingRequired =
@@ -190,9 +204,12 @@ let analyzeScannerData (scanners: Map<int, Scanner>) =
                     Some((matchedIndices.Value, (transformFunction1to2, transformFunction2to1)))
         else None
 
-    let scannerCombos = scanners.Keys |> Seq.toList |> combinations 2
-
     let numOverlapRequired = 12
+
+    let scannerCombos = (getAllDistanceOverlaps scanners) 
+                            |> List.map (fun (id1, lst) -> lst |> List.map (fun (id2, cnt) -> ((id1, id2), cnt)))
+                            |> List.reduce List.append |> List.filter (fun (_, cnt) -> cnt >= numOverlapRequired)
+                            |> List.map (fun ((id1, id2), _) -> [id1; id2])
 
     let matchedScannerPoints = scannerCombos
                                 |> List.map (fun ls -> 
@@ -206,25 +223,6 @@ let analyzeScannerData (scanners: Map<int, Scanner>) =
                                         None
                                 ) |> List.filter(fun f -> f.IsSome) |> List.map(fun f -> f.Value)
     matchedScannerPoints
-    //// Possible optimization:
-    //let numScanners = scanners.Keys.Count
-    //let allOverlaps = [0..numScanners-2] |> List.map (fun id1 ->
-    //    let id1Dists = scanners[id1].AllDistances
-    //    let overlaps = [(id1+1)..numScanners-1] |> List.map (fun id2 -> 
-    //        let id2Dists = scanners[id2].AllDistances
-    //        let overlap = intersect id1Dists id2Dists
-    //        (id2, overlap.Length)
-    //    )
-    //    (id1, overlaps |> List.sortBy (fun f -> snd f) |> List.rev)
-    //)
-    //let orderedByBestOverlap = allOverlaps |> List.sortBy (fun (id, overlaps) -> snd (overlaps |> List.head)) |> List.rev
-    //let mppp = orderedByBestOverlap |> List.map (fun (id1, overlaps) -> 
-    //    let found = overlaps |> List.tryFind (fun (id2, _) -> 
-    //        let xxx = align id1 id2 12
-    //        xxx.IsSome
-    //    )
-    //    (id1, found)
-    //)
 
 let bruteCompare (scanners: Map<int, Scanner>) id1 id2 numOverlappingRequired =
     let pts1 = scanners[id1].Points |> List.map (fun pt -> pt.Sub scanners[id1].Points[0])
@@ -288,8 +286,8 @@ let part2 input =
             for conn in connections do
                 let (idSub, _, xform) = conn
                 let newXforms = xforms |> List.append [xform]
-                let xxx = newXforms |> List.fold(fun agg curr -> curr agg) Vector3D.Zero
-                yield xxx
+                let scannerLocation = newXforms |> List.fold(fun agg curr -> curr agg) Vector3D.Zero
+                yield scannerLocation
                 yield! loop idSub newVisited newXforms
         }
     let startId = 0
