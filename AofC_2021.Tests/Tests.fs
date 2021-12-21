@@ -364,7 +364,7 @@ let ``D16`` () =
 [<Fact>]
 let ``D17`` () =
     let input = "target area: x=20..30, y=-10..-5"
-    //TODO: Assert.Equal(45, (D17.part1 input))
+    Assert.Equal(45, (D17.part1 input))
     Assert.Equal(112, (D17.part2 input))
 
 [<Fact>]
@@ -553,5 +553,5 @@ let ``D21`` () =
     Player 2 starting position: 8
     "
     Assert.Equal(739785, D21.part1 input)
-
-    // TODO: too slow! Assert.Equal(444356092776315UL, D21.part2 input)
+    // TODO: too slow!
+    //Assert.Equal(444356092776315UL, D21.part2 input)
