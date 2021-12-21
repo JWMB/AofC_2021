@@ -242,30 +242,38 @@ let bruteCompare (scanners: Map<int, Scanner>) id1 id2 numOverlappingRequired =
 
     if results.Length > 0 then (results |> List.reduce List.append) else []
 
-let part1 input =
-    let data = parseInput input
-    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
-
+let getOrderedScannerPairsWithTransform scanners startFromId =
     let matchedScannerPoints = analyzeScannerData scanners
 
     let findConnections id = 
         matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
             id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
-    
-    let rec loop id visited xforms =
+
+    //TODO: using a mutable collection...
+    let visited = new System.Collections.Generic.HashSet<int>();
+    let rec loop id xforms =
         seq {
-            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
-            let newVisited = [id] |> List.append visited
+            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> visited.Contains(idSub) = false)
             for conn in connections do
                 let (idSub, indices, xform) = conn
-                let points = scanners[idSub].Points
+                visited.Add(idSub) |> ignore
                 let newXforms = xforms |> List.append [xform] 
-                let xformed = newXforms |> List.fold(fun agg curr -> agg |> List.map curr ) points
-                yield xformed
-                yield! loop idSub newVisited newXforms
+                let completeXformFunc pts = newXforms |> List.fold(fun agg curr -> agg |> List.map curr )pts
+                yield ((id, idSub), completeXformFunc)
+                yield! loop idSub newXforms
         }
+    loop startFromId []
+
+let part1 input =
+    let data = parseInput input
+    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
+
     let startId = 0
-    let allPoints = (loop startId [] []) |> Seq.toList |> List.reduce List.append |> List.append (scanners[startId].Points) |> List.distinct
+    let orderedTransforms = getOrderedScannerPairsWithTransform scanners startId
+    let allPoints = orderedTransforms 
+                    |> Seq.map (fun ((_, id2), transformer) -> 
+                        transformer scanners[id2].Points
+                    ) |> Seq.toList |> List.reduce List.append |> List.append (scanners[startId].Points) |> List.distinct
 
     allPoints.Length
     
@@ -273,25 +281,12 @@ let part2 input =
     let data = parseInput input
     let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
 
-    let matchedScannerPoints = analyzeScannerData scanners
-
-    let findConnections id = 
-        matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
-            id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
-    
-    let rec loop id visited xforms =
-        seq {
-            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
-            let newVisited = [id] |> List.append visited
-            for conn in connections do
-                let (idSub, _, xform) = conn
-                let newXforms = xforms |> List.append [xform]
-                let scannerLocation = newXforms |> List.fold(fun agg curr -> curr agg) Vector3D.Zero
-                yield scannerLocation
-                yield! loop idSub newVisited newXforms
-        }
     let startId = 0
-    let allPoints = (loop startId [] []) |> Seq.toList |> List.distinct
+    let orderedTransforms = getOrderedScannerPairsWithTransform scanners startId
+    let allPoints = orderedTransforms 
+                    |> Seq.map (fun ((_, id2), transformer) -> 
+                        transformer [Vector3D.Zero;]
+                    ) |> Seq.toList |> List.reduce List.append |> List.append ([Vector3D.Zero]) |> List.distinct
 
     let allTaxiLengths = (allPoints |> combinations 2)
                             |> List.map(fun lst -> 
