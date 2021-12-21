@@ -100,7 +100,7 @@ let part1 input =
                                 ) (boards, "")
     (getSumOfLeftovers firstWinner.[0]) * (int draw)
 ```
-Result (in `37`ms): `69579`
+Result (in `40`ms): `69579`
 ### part2
 ```FSharp
 let part2 input =
@@ -121,7 +121,7 @@ let part2 input =
         let sumOfLeftovers = getSumOfLeftovers lastWinner
         sumOfLeftovers * finalDraw
 ```
-Result (in `65`ms): `14877`
+Result (in `66`ms): `14877`
 ## [Day 5 - Hydrothermal Venture](https://adventofcode.com/2021/day/5)
 [Source](AofC_2021/D5.fs) | [Input](AofC_2021/D5.txt)  
 ### part1
@@ -131,7 +131,7 @@ let part1 input =
     let boardArray = drawLines boardCoords (lines |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y))
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `162`ms): `7297`
+Result (in `136`ms): `7297`
 ### part2
 ```FSharp
 let part2 input =
@@ -139,7 +139,7 @@ let part2 input =
     let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `193`ms): `21038`
+Result (in `120`ms): `21038`
 ## [Day 6 - Lanternfish](https://adventofcode.com/2021/day/6)
 [Source](AofC_2021/D6.fs) | [Input](AofC_2021/D6.txt)  
 ### part1
@@ -157,7 +157,7 @@ let part1 input =
                 ) school
     final.Length
 ```
-Result (in `90`ms): `358214`
+Result (in `58`ms): `358214`
 ### part2
 ```FSharp
 let part2 input =
@@ -273,7 +273,7 @@ let part2 input =
     let sum = translatedOutput |> Array.sum
     sum
 ```
-Result (in `937`ms): `1043101`
+Result (in `784`ms): `1043101`
 ## [Day 9 - Smoke Basin](https://adventofcode.com/2021/day/9)
 [Source](AofC_2021/D9.fs) | [Input](AofC_2021/D9.txt)  
 ### part1
@@ -282,7 +282,7 @@ let part1 input =
     let map = createDepthMap input
     map.findLowPoints |> Array.map map.getAtPoint |> Array.map (fun f -> f + 1) |> Array.sum
 ```
-Result (in `11`ms): `535`
+Result (in `14`ms): `535`
 ### part2
 ```FSharp
 let part2 input =
@@ -296,7 +296,7 @@ let part2 input =
     let top3 = basinsBySize |> Array.take 3
     top3 |> Array.map (fun f -> f.Length) |> Array.reduce (fun agg curr -> agg * curr)
 ```
-Result (in `831`ms): `1122700`
+Result (in `810`ms): `1122700`
 ## [Day 10 - Syntax Scoring](https://adventofcode.com/2021/day/10)
 [Source](AofC_2021/D10.fs) | [Input](AofC_2021/D10.txt)  
 ### part1
@@ -311,7 +311,7 @@ let part1 (input: string) =
         |> Array.map (fun f -> pointsPt1.[f])
         |> Array.sum
 ```
-Result (in `6`ms): `318081`
+Result (in `13`ms): `318081`
 ### part2
 ```FSharp
 let part2 (input: string) =
@@ -349,7 +349,7 @@ let part2 input =
         else folder state step + 1
     folder data.Values 1
 ```
-Result (in `63`ms): `519`
+Result (in `64`ms): `519`
 ## [Day 12 - Passage Pathing](https://adventofcode.com/2021/day/12)
 [Source](AofC_2021/D12.fs) | [Input](AofC_2021/D12.txt)  
 ### part1
@@ -359,7 +359,7 @@ let part1 input =
     let paths = evaluate pairs (fun f ->  if f.ToUpper() = f then -1 else 1)
     paths.Length
 ```
-Result (in `88`ms): `4413`
+Result (in `87`ms): `4413`
 ### part2
 ```FSharp
 let part2 input =
@@ -372,7 +372,7 @@ let part2 input =
     let distinct = allPaths |> Array.reduce Array.append |> Array.distinct
     distinct.Length
 ```
-Result (in `1988`ms): `118803`
+Result (in `1963`ms): `118803`
 ## [Day 13 - Transparent Origami](https://adventofcode.com/2021/day/13)
 [Source](AofC_2021/D13.fs) | [Input](AofC_2021/D13.txt)  
 ### part1
@@ -390,7 +390,7 @@ let part2 input =
     let folded = data.Folds |> Array.fold (fun agg curr -> fold curr agg) data.Points
 
     let grid = Grid2D.FromCoordinates folded
-    let mutable bm = [|0..grid.Size.Y|] |> Array.map (fun y -> [|0..grid.Size.X|] |> Array.map (fun x -> '.'))
+    let mutable bm = [|0..grid.Size.Y-1|] |> Array.map (fun y -> [|0..grid.Size.X-1|] |> Array.map (fun x -> '.'))
 
     for pt in folded |> Array.map (fun pt -> { X = pt.X - grid.TopLeft.X; Y = pt.Y - grid.TopLeft.Y }) do
         bm.[pt.Y].[pt.X] <- '#'
@@ -425,7 +425,7 @@ let part1 input =
     let cntByCharSorted = folded |> Seq.toArray |> Array.groupBy (fun f -> f) |> Array.map (fun f -> (fst f, (snd f).Length)) |> Array.sortBy (fun f -> snd f)
     (snd (Array.last cntByCharSorted) - (snd cntByCharSorted.[0]))
 ```
-Result (in `19`ms): `2447`
+Result (in `16`ms): `2447`
 ### part2
 ```FSharp
 let part2 input =
@@ -459,7 +459,7 @@ let part2 input =
     let sorted = withExtraFinal |> Array.sortBy (fun f -> snd f)
     (snd (Array.last sorted) - (snd sorted.[0]))
 ```
-Result (in `12`ms): `3018019237563`
+Result (in `11`ms): `3018019237563`
 ## [Day 15 - Chiton](https://adventofcode.com/2021/day/15)
 [Source](AofC_2021/D15.fs) | [Input](AofC_2021/D15.txt)  
 ### part1
@@ -474,7 +474,7 @@ let part1 (input: string) =
 
     fst info
 ```
-Result (in `85`ms): `811`
+Result (in `91`ms): `811`
 ### part2
 ```FSharp
 let part2 (input: string) =
@@ -487,7 +487,7 @@ let part2 (input: string) =
 
     fst info
 ```
-Result (in `1831`ms): `3012`
+Result (in `1919`ms): `3012`
 ## [Day 16 - Packet Decoder](https://adventofcode.com/2021/day/16)
 [Source](AofC_2021/D16.fs) | [Input](AofC_2021/D16.txt)  
 ### part1
@@ -538,3 +538,237 @@ let part2 (input:string) =
     result
 ```
 Result (in `1`ms): `167737115857`
+## [Day 17 - Trick Shot](https://adventofcode.com/2021/day/17)
+[Source](AofC_2021/D17.fs) | [Input](AofC_2021/D17.txt)  
+### part1
+```FSharp
+let part1 input =
+    let target = parseInput input
+
+    let maxXToReach = [|1..target.BottomRight.X|] |> Array.filter(fun f ->
+        let tri = getTriangularNumber f
+        if tri < target.BottomRight.X && tri >= target.TopLeft.X then true else false) |> Array.min
+
+    let velYsAndHits = [|-10..100|] 
+                        |> Array.map (fun velY -> 
+                            let r = simulate Vector2D.Zero { X = maxXToReach; Y = velY } target
+                            (velY, r)
+                        ) |> Array.filter (fun (_, hit) -> hit.IsSome)
+    let maxVel = velYsAndHits |> Array.map(fun (velY, _) -> velY) |> Array.max
+    getTriangularNumber maxVel
+```
+Result (in `4`ms): `5050`
+### part2
+```FSharp
+let part2 input = 
+    let target = parseInput input
+    //TODO: equation instead of brute-force?
+
+    let possibleXs = [|1..target.BottomRight.X|] |> Array.filter(fun velX ->
+        let isInside x = x >= target.Left && x <= target.Right
+        let endpoints = [|0..velX-1|] |> Array.map (fun numSteps -> 
+            let tri1 = getTriangularNumber velX
+            let tri2 = getTriangularNumber (velX - numSteps)
+            tri1 - tri2)
+        let valid = endpoints |> Array.filter(fun v -> isInside v)
+        valid.Length > 0
+    )
+
+    let combos = possibleXs |> Array.map (fun velX ->
+        let velYsAndHits = [|-1000..1000|] |> Array.map (fun velY -> 
+            let r = simulate Vector2D.Zero { X = velX; Y = velY } target
+            (velY, r)
+        )
+        let found = velYsAndHits |> Array.filter(fun f -> (snd f).IsSome) |> Array.map(fun f -> fst f)
+        found |> Array.map (fun velY -> { X = velX; Y = velY; })
+    )                               
+    let flattened = combos |> Array.reduce Array.append
+    flattened.Length
+```
+Result (in `617`ms): `5945`
+## [Day 18 - Snailfish](https://adventofcode.com/2021/day/18)
+[Source](AofC_2021/D18.fs) | [Input](AofC_2021/D18.txt)  
+### part1
+```FSharp
+let part1 input =
+    let numbers = parseInput input //Regex.Split(input.Trim(), @"\r?\n\s*") |> Array.map (fun r -> r.Trim()) |> Array.map parseNumber
+
+    let final = numbers |> Array.reduce (fun p c -> 
+        let next = reduce (add p c)
+        //printfn "%O" (next.ToNestedString)
+        next
+    )
+    calcMagnitude final
+```
+Result (in `437`ms): `4124`
+### part2
+```FSharp
+let part2 input =
+    let numbers = parseInput input //Regex.Split(input.Trim(), @"\r?\n\s*") |> Array.map (fun r -> r.Trim()) |> Array.map parseNumber
+
+    // part 2:    // [0..numbers.Length-2] |> List.map (fun a -> [(a+1)..numbers.Length-1]
+    let combos = [0..numbers.Length-1] |> List.map (fun a -> [0..numbers.Length-1] |> List.map (fun b -> (numbers[a], numbers[b]))) |> List.reduce List.append
+    let mags = combos |> List.map (fun f -> 
+                                    let added = add (fst f) (snd f)
+                                    calcMagnitude (reduce added))
+                                    |> List.sort 
+    let diff = mags |> List.last
+    // 4549 too low
+    diff
+```
+Result (in `6229`ms): `4673`
+## [Day 19 - Beacon Scanner](https://adventofcode.com/2021/day/19)
+[Source](AofC_2021/D19.fs) | [Input](AofC_2021/D19.txt)  
+### part1
+```FSharp
+let part1 input =
+    let data = parseInput input
+    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
+
+    let matchedScannerPoints = analyzeScannerData scanners
+
+    let findConnections id = 
+        matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
+            id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
+    
+    let rec loop id visited xforms =
+        seq {
+            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
+            let newVisited = [id] |> List.append visited
+            for conn in connections do
+                let (idSub, indices, xform) = conn
+                let points = scanners[idSub].Points
+                let newXforms = xforms |> List.append [xform] 
+                let xformed = newXforms |> List.fold(fun agg curr -> agg |> List.map curr ) points
+                yield xformed
+                yield! loop idSub newVisited newXforms
+        }
+    let startId = 0
+    let allPoints = (loop startId [] []) |> Seq.toList |> List.reduce List.append |> List.append (scanners[startId].Points) |> List.distinct
+
+    allPoints.Length
+```
+Result (in `7135`ms): `376`
+### part2
+```FSharp
+let part2 input =
+    let data = parseInput input
+    let scanners = Map (data |> Map.toList |> List.map (fun (id, points) -> (id, Scanner points)))
+
+    let matchedScannerPoints = analyzeScannerData scanners
+
+    let findConnections id = 
+        matchedScannerPoints |> List.filter (fun ((id1, _, _), (id2, _, _)) -> 
+            id1 = id || id2 = id) |> List.map (fun ((id1, indices1, x1to2), (id2, indices2, x2to1)) -> if id1 = id then (id2, indices2, x2to1) else (id1, indices1, x1to2))
+    
+    let rec loop id visited xforms =
+        seq {
+            let connections = (findConnections id) |> List.filter (fun (idSub, _, _) -> (visited |> List.contains idSub) = false)
+            let newVisited = [id] |> List.append visited
+            for conn in connections do
+                let (idSub, _, xform) = conn
+                let newXforms = xforms |> List.append [xform]
+                let xxx = newXforms |> List.fold(fun agg curr -> curr agg) Vector3D.Zero
+                yield xxx
+                yield! loop idSub newVisited newXforms
+        }
+    let startId = 0
+    let allPoints = (loop startId [] []) |> Seq.toList |> List.distinct
+
+    let allTaxiLengths = (allPoints |> combinations 2)
+                            |> List.map(fun lst -> 
+                                let diff = lst[0].Sub lst[1]
+                                let taxiLength = System.Math.Abs(diff.X) + System.Math.Abs(diff.Y) + System.Math.Abs(diff.Z)
+                                taxiLength
+                            ) |> List.sort |> List.rev
+
+    allTaxiLengths |> List.head
+```
+Result (in `2511`ms): `10772`
+## [Day 20 - Trench Map](https://adventofcode.com/2021/day/20)
+[Source](AofC_2021/D20.fs) | [Input](AofC_2021/D20.txt)  
+### part1
+```FSharp
+let part1 input =
+    let (algo, image) = parseInput input
+    let final = performPasses 2 algo image
+
+    let num1s = final |> Array.map (fun row -> row |> Array.filter (fun v -> v = 1) |> Array.length) |> Array.sum
+    num1s
+```
+Result (in `44`ms): `5249`
+### part2
+```FSharp
+let part2 input =
+    let (algo, image) = parseInput input
+
+    let final = performPasses 50 algo image
+
+    let num1s = final |> Array.map (fun row -> row |> Array.filter (fun v -> v = 1) |> Array.length) |> Array.sum
+    num1s
+```
+Result (in `2076`ms): `15714`
+## [Day 21 - Dirac Dice](https://adventofcode.com/2021/day/21)
+[Source](AofC_2021/D21.fs) | [Input](AofC_2021/D21.txt)  
+### part1
+```FSharp
+let part1 input =
+    let data = parseInput input
+    let players = data |> Array.map(fun (player, pos) -> pos) |> Array.toList
+
+    let numThrowsPerTurn = 3
+    let turnThrows turn =
+        [1..numThrowsPerTurn] |> List.map(fun p -> (turn * 3 + p - 1) % 100 + 1)
+
+    let rec loop turn0 (players: Player list) =
+        let throws = turnThrows turn0
+        let (newP, modified) = update turn0 (throws |> List.sum) players
+        if newP.Score >= 1000 then (turn0, modified)
+        else
+            loop (turn0+1) modified
+
+    let (turn0, final) = loop 0 players
+
+    let losingPlayer = final |> List.sortBy(fun p -> p.Score) |> List.head
+    let result = (turn0 + 1) * numThrowsPerTurn * losingPlayer.Score
+    result
+```
+Result (in `2`ms): `916083`
+### part2
+```FSharp
+let part2 input = 
+    let data = parseInput input
+    let players = data |> Array.map(fun (_, pos) -> pos) |> Array.toList
+
+    let diracDieSides = 3
+    let numThrowsPerTurn = 3
+
+    let allCombosPerTurn = permutations numThrowsPerTurn [1..diracDieSides]
+    let countsBySum = Map (allCombosPerTurn |> List.groupBy (fun f -> f |> List.sum) |> List.map (fun (sum, org) -> (sum, org.Length)))
+    let winAt = 21
+
+    let rec loop turn numUniverses (players: Player list) = seq {
+            for outcome in countsBySum do
+                let (newP, modified) = update (turn % 2) outcome.Key players
+                if newP.Score >= winAt then
+                    let winner = if modified[0].Score > modified[1].Score then 0 else 1
+                    yield (winner, numUniverses * (uint64 outcome.Value))
+                else
+                    yield! loop (turn + 1) (numUniverses * (uint64 outcome.Value)) modified
+        }
+
+    let seq = loop 0 1UL players
+
+    let xxx = seq |> Seq.fold (fun (agg: uint64 list) (winner, numUniverses) ->
+                                                    let ulWinner = uint64 winner
+                                                    let newWins = [
+                                                        agg[0] + ((1UL - ulWinner) * numUniverses);
+                                                        agg[1] + (ulWinner * numUniverses);
+                                                    ]
+                                                    newWins
+                                                    ) [0UL; 0UL;]
+    let result = xxx |> List.max
+    
+    result
+```
+Result (in `29947`ms): `49982165861983`
