@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Combinatorics.fs" />
     <Compile Include="Grid.fs" />
     <Compile Include="AofCSiteInfo.fs" />
   </ItemGroup>

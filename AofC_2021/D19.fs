@@ -17,49 +17,10 @@ let parseInput (input: string) =
     )
     Map(parsed)
 
-let rec distribute e = function
-| [] -> [[e]]
-| x::xs' as xs -> (e::xs)::[for xs in distribute e xs' -> x::xs]
-
-let rec permute = function
-| [] -> [[]]
-| e::xs -> List.collect (distribute e) (permute xs)
-
-let permutations depth aList =
-    let rec loop currDepth generated = seq {
-        for item in aList do
-            let x = [item] |> List.append generated
-            if currDepth = depth then yield x
-            else yield! loop (currDepth+1) x
-    }
-    loop 1 [] |> Seq.toList
-
-let combinations size aList = 
-    let rec pairHeadAndTail acc bList = 
-        match bList with
-        | [] -> acc
-        | x::xs -> pairHeadAndTail (List.Cons ((x,xs),acc)) xs
-    let remainderAfter = aList |> pairHeadAndTail [] |> Map.ofList
-    let rec comboIter n acc = 
-        match n with
-        | 0 -> acc
-        | _ -> 
-            acc
-            |> List.fold (fun acc alreadyChosenElems ->
-                match alreadyChosenElems with
-                | [] -> aList //Nothing chosen yet, therefore everything remains.
-                | lastChoice::_ -> remainderAfter.[lastChoice]
-                |> List.fold (fun acc elem ->
-                    List.Cons (List.Cons (elem,alreadyChosenElems),acc)
-                ) acc
-            ) []
-            |> comboIter (n-1)
-    comboIter size [[]]
-
 type Scanner(points: Vector3D list) =
     let distancePairs =
         let ids = points |> List.mapi (fun i f -> i)
-        let idCombos = ids |> combinations 2
+        let idCombos = ids |> Tools.Combinatorics.combinations 2
         let idsToDistance = idCombos |> List.map(fun pair -> 
             let tuple = (pair[0], pair[1])
             (tuple, (points[fst tuple].Sub points[snd tuple]).LengthSquare)
@@ -91,9 +52,9 @@ let pointsToString pts = pts |> List.map (fun pt -> $"{pt.X},{pt.Y},{pt.Z}") |> 
 let intersect l1 l2 = Set.intersect (Set.ofList l1) (Set.ofList l2) |> Set.toList
 
 let allTransformationCombos =
-    let axisSignVariations = (permutations 3 [-1;1;]) |> List.map (fun f -> { X = f[0]; Y = f[1]; Z = f[2]; })
+    let axisSignVariations = (Tools.Combinatorics.permutations 3 [-1;1;]) |> List.map (fun f -> { X = f[0]; Y = f[1]; Z = f[2]; })
     //let rotations = [[0;1;2;]; [0;2;1]; [1;0;2;]; [2;0;1;]; ] 
-    let rotations = permute [0;1;2;] //Stupid - yields several identical results, no?
+    let rotations = Tools.Combinatorics.permute [0;1;2;] //Stupid - yields several identical results, no?
     axisSignVariations |> List.map (fun signs -> rotations |> List.map (fun rot -> (rot, signs))) |> List.reduce List.append
     
 let transformer rotation signs (pt: Vector3D) =
@@ -288,7 +249,7 @@ let part2 input =
                         transformer [Vector3D.Zero;]
                     ) |> Seq.toList |> List.reduce List.append |> List.append ([Vector3D.Zero]) |> List.distinct
 
-    let allTaxiLengths = (allPoints |> combinations 2)
+    let allTaxiLengths = (allPoints |> Tools.Combinatorics.combinations 2)
                             |> List.map(fun lst -> 
                                 let diff = lst[0].Sub lst[1]
                                 let taxiLength = System.Math.Abs(diff.X) + System.Math.Abs(diff.Y) + System.Math.Abs(diff.Z)
