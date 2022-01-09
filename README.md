@@ -9,7 +9,7 @@ Learning F# by doing [AdventOfCode 2021](https://adventofcode.com/2021)
 let part1 input =
     countIncreases (parseInput input)
 ```
-Result (in `10`ms): `1709`
+Result (in `9`ms): `1709`
 ### part2
 ```FSharp
 let part2 input =
@@ -121,7 +121,7 @@ let part2 input =
         let sumOfLeftovers = getSumOfLeftovers lastWinner
         sumOfLeftovers * finalDraw
 ```
-Result (in `67`ms): `14877`
+Result (in `72`ms): `14877`
 ## [Day 5 - Hydrothermal Venture](https://adventofcode.com/2021/day/5)
 [Source](AofC_2021/D5.fs) | [Input](AofC_2021/D5.txt)  
 ### part1
@@ -131,7 +131,7 @@ let part1 input =
     let boardArray = drawLines boardCoords (lines |> Array.filter (fun el -> el.Start.X = el.End.X || el.Start.Y = el.End.Y))
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `157`ms): `7297`
+Result (in `167`ms): `7297`
 ### part2
 ```FSharp
 let part2 input =
@@ -139,7 +139,7 @@ let part2 input =
     let boardArray = drawLines boardCoords lines
     boardArray |> Array.filter (fun el -> el > 1) |> Array.length
 ```
-Result (in `191`ms): `21038`
+Result (in `200`ms): `21038`
 ## [Day 6 - Lanternfish](https://adventofcode.com/2021/day/6)
 [Source](AofC_2021/D6.fs) | [Input](AofC_2021/D6.txt)  
 ### part1
@@ -157,7 +157,7 @@ let part1 input =
                 ) school
     final.Length
 ```
-Result (in `78`ms): `358214`
+Result (in `85`ms): `358214`
 ### part2
 ```FSharp
 let part2 input =
@@ -212,7 +212,7 @@ let part1 input =
     let counts = outputLengths |> Array.filter (fun f -> singleInstanceSegmentCounts |> Array.contains f ) |> Array.length
     counts
 ```
-Result (in `33`ms): `445`
+Result (in `30`ms): `445`
 ### part2
 ```FSharp
 let part2 input =
@@ -273,7 +273,7 @@ let part2 input =
     let sum = translatedOutput |> Array.sum
     sum
 ```
-Result (in `955`ms): `1043101`
+Result (in `939`ms): `1043101`
 ## [Day 9 - Smoke Basin](https://adventofcode.com/2021/day/9)
 [Source](AofC_2021/D9.fs) | [Input](AofC_2021/D9.txt)  
 ### part1
@@ -296,7 +296,7 @@ let part2 input =
     let top3 = basinsBySize |> Array.take 3
     top3 |> Array.map (fun f -> f.Length) |> Array.reduce (fun agg curr -> agg * curr)
 ```
-Result (in `838`ms): `1122700`
+Result (in `836`ms): `1122700`
 ## [Day 10 - Syntax Scoring](https://adventofcode.com/2021/day/10)
 [Source](AofC_2021/D10.fs) | [Input](AofC_2021/D10.txt)  
 ### part1
@@ -338,7 +338,7 @@ let part1 input =
                                     ) (data.Values, 0)
     numFlashes
 ```
-Result (in `24`ms): `1679`
+Result (in `25`ms): `1679`
 ### part2
 ```FSharp
 let part2 input =
@@ -349,7 +349,7 @@ let part2 input =
         else folder state step + 1
     folder data.Values 1
 ```
-Result (in `65`ms): `519`
+Result (in `67`ms): `519`
 ## [Day 12 - Passage Pathing](https://adventofcode.com/2021/day/12)
 [Source](AofC_2021/D12.fs) | [Input](AofC_2021/D12.txt)  
 ### part1
@@ -359,7 +359,7 @@ let part1 input =
     let paths = evaluate pairs (fun f ->  if f.ToUpper() = f then -1 else 1)
     paths.Length
 ```
-Result (in `88`ms): `4413`
+Result (in `90`ms): `4413`
 ### part2
 ```FSharp
 let part2 input =
@@ -372,7 +372,7 @@ let part2 input =
     let distinct = allPaths |> Array.reduce Array.append |> Array.distinct
     distinct.Length
 ```
-Result (in `1978`ms): `118803`
+Result (in `2037`ms): `118803`
 ## [Day 13 - Transparent Origami](https://adventofcode.com/2021/day/13)
 [Source](AofC_2021/D13.fs) | [Input](AofC_2021/D13.txt)  
 ### part1
@@ -474,7 +474,7 @@ let part1 (input: string) =
 
     fst info
 ```
-Result (in `84`ms): `811`
+Result (in `83`ms): `811`
 ### part2
 ```FSharp
 let part2 (input: string) =
@@ -487,7 +487,7 @@ let part2 (input: string) =
 
     fst info
 ```
-Result (in `1856`ms): `3012`
+Result (in `1882`ms): `3012`
 ## [Day 16 - Packet Decoder](https://adventofcode.com/2021/day/16)
 [Source](AofC_2021/D16.fs) | [Input](AofC_2021/D16.txt)  
 ### part1
@@ -557,7 +557,7 @@ let part1 input =
     let maxVel = velYsAndHits |> Array.map(fun (velY, _) -> velY) |> Array.max
     getTriangularNumber maxVel
 ```
-Result (in `9`ms): `5050`
+Result (in `4`ms): `5050`
 ### part2
 ```FSharp
 let part2 input = 
@@ -585,7 +585,7 @@ let part2 input =
     let flattened = combos |> Array.reduce Array.append
     flattened.Length
 ```
-Result (in `655`ms): `5945`
+Result (in `659`ms): `5945`
 ## [Day 18 - Snailfish](https://adventofcode.com/2021/day/18)
 [Source](AofC_2021/D18.fs) | [Input](AofC_2021/D18.txt)  
 ### part1
@@ -600,7 +600,7 @@ let part1 input =
     )
     calcMagnitude final
 ```
-Result (in `468`ms): `4124`
+Result (in `460`ms): `4124`
 ### part2
 ```FSharp
 let part2 input =
@@ -616,7 +616,7 @@ let part2 input =
     // 4549 too low
     diff
 ```
-Result (in `6525`ms): `4673`
+Result (in `7136`ms): `4673`
 ## [Day 19 - Beacon Scanner](https://adventofcode.com/2021/day/19)
 [Source](AofC_2021/D19.fs) | [Input](AofC_2021/D19.txt)  
 ### part1
@@ -634,7 +634,7 @@ let part1 input =
 
     allPoints.Length
 ```
-Result (in `899`ms): `376`
+Result (in `864`ms): `376`
 ### part2
 ```FSharp
 let part2 input =
@@ -648,7 +648,7 @@ let part2 input =
                         transformer [Vector3D.Zero;]
                     ) |> Seq.toList |> List.reduce List.append |> List.append ([Vector3D.Zero]) |> List.distinct
 
-    let allTaxiLengths = (allPoints |> combinations 2)
+    let allTaxiLengths = (allPoints |> Tools.Combinatorics.combinations 2)
                             |> List.map(fun lst -> 
                                 let diff = lst[0].Sub lst[1]
                                 let taxiLength = System.Math.Abs(diff.X) + System.Math.Abs(diff.Y) + System.Math.Abs(diff.Z)
@@ -657,7 +657,7 @@ let part2 input =
 
     allTaxiLengths |> List.head
 ```
-Result (in `744`ms): `10772`
+Result (in `718`ms): `10772`
 ## [Day 20 - Trench Map](https://adventofcode.com/2021/day/20)
 [Source](AofC_2021/D20.fs) | [Input](AofC_2021/D20.txt)  
 ### part1
@@ -669,7 +669,7 @@ let part1 input =
     let num1s = final |> Array.map (fun row -> row |> Array.filter (fun v -> v = 1) |> Array.length) |> Array.sum
     num1s
 ```
-Result (in `49`ms): `5249`
+Result (in `48`ms): `5249`
 ### part2
 ```FSharp
 let part2 input =
@@ -680,7 +680,7 @@ let part2 input =
     let num1s = final |> Array.map (fun row -> row |> Array.filter (fun v -> v = 1) |> Array.length) |> Array.sum
     num1s
 ```
-Result (in `2423`ms): `15714`
+Result (in `2347`ms): `15714`
 ## [Day 21 - Dirac Dice](https://adventofcode.com/2021/day/21)
 [Source](AofC_2021/D21.fs) | [Input](AofC_2021/D21.txt)  
 ### part1
@@ -750,4 +750,52 @@ let part2 input =
 
     result
 ```
-Result (in `14703`ms): `49982165861983`
+Result (in `14475`ms): `49982165861983`
+## [Day 22 - Reactor Reboot](https://adventofcode.com/2021/day/22)
+[Source](AofC_2021/D22.fs) | [Input](AofC_2021/D22.txt)  
+### part1
+```FSharp
+let part1 input =
+    let raw = parseInput input
+    let validCube = Grid3D.FromCoordinates [| { X = -50; Y = -50; Z = -50; }; { X = 50; Y = 50; Z = 50; } |]
+    //let valid = raw |> List.filter (fun (action, (min, max)) -> validCube.IsValid min && validCube.IsValid max)
+
+    let actionCubes = raw |> List.map (fun (action, (min, max)) -> (action, Grid3D.FromCoordinates [| min;max |])) 
+                        |> List.filter (fun (_, cube) -> (cube.Intersect validCube).Volume = cube.Volume)
+
+    //let bounding = validCube //Grid3D.GetBounding (actionCubes |> List.map (fun (_, cube) -> cube)) 
+    //let partitioning = PartitionedSpace.Create(bounding, {X = 2; Y = 2; Z = 2;})
+    //let partitioned = actionCubes |> List.map(fun (action, cube) ->
+    //                                    let split = partitioning.splitIntoPartitions cube
+    //                                    split |> List.map (fun (part, c) -> (part, (action, c)))
+    //                                ) |> List.reduce List.append
+    //let byPartition = partitioned |> List.groupBy (fun f -> fst f)
+    //let volumes = byPartition |> List.map (fun (_, f) -> f |> List.map(fun (_, f2) -> f2)) |> List.map (fun f -> performCubeActionsNaive f)
+    
+    let cubes = performCubeActions actionCubes
+    let volumes = cubes |> List.map (fun f -> f.Volume)
+
+    let total = int (volumes |> List.map (fun v -> bigint v) |> List.sum)
+
+    //let naiveResult = performCubeActionsNaive actionCubes
+    //naiveResult //598616
+    total
+```
+Result (in `28`ms): `598616`
+### part2
+```FSharp
+let part2 input =
+    let raw = parseInput input
+
+    let actionCubes = raw |> List.map (fun (action, (min, max)) -> (action, Grid3D.FromCoordinates [| min;max |]))
+
+    let addCubes = actionCubes |> List.filter (fun (action, _) -> action) |> List.map(fun (_, cube) -> cube)
+    let bounding = Grid3D.GetBounding addCubes
+
+    let partitioned = (PartitionedData.Create actionCubes 20 bounding).GetFlattened
+    let cubes = partitioned |> List.map (fun f -> performCubeActions f)
+    let volumes = cubes |> List.map (fun r -> r |> List.map (fun cube -> cube.Volume)) |> List.reduce List.append
+    let total = volumes |> List.map (fun v -> bigint v) |> List.sum
+    uint64 total
+```
+Result (in `154`ms): `1193043154475246`
